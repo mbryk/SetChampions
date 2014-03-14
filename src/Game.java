@@ -3,16 +3,16 @@ package src;
 import java.util.ArrayList;
 
 public class Game {
-	private ArrayList<Player> players;
-	private Board board;
+	private ArrayList<PlayerServer> players;
+	private Board2 board;
 	
 	public Game(){
-		players = new ArrayList<Player>();
-		board = new Board();
+		players = new ArrayList<PlayerServer>();
+		board = new Board2();
 		startGame();
 	}
 	
-	public void addPlayer(Player player){
+	public void addPlayer(PlayerServer player){
 		players.add(player);
 	}
 	
@@ -20,17 +20,17 @@ public class Game {
 		board.printBoard();
 	}
 	
-	public void checkMove(Player player, Move move){
+	public void checkMove(PlayerServer player, Move move){
 		if(board.checkMove(move)){
 			addPoint(player);
 		}
 	}
 	
-	private void addPoint(Player player){
+	private void addPoint(PlayerServer player){
 		
 	}
 	
-	public Board getBoard(){
+	public Board2 getBoard(){
 		return board;
 	}
 }

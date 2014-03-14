@@ -1,8 +1,7 @@
 package src;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 
 public class Start {
 
@@ -14,7 +13,7 @@ public class Start {
             while (true) {
                 System.out.println("Listening for Players");
                 Socket s = serverSocket.accept();
-                Player player = new Player(s,game);
+                PlayerServer player = new PlayerServer(s,game);
                 game.addPlayer(player);
                 player.start();
             }
