@@ -33,4 +33,16 @@ public class Board extends JPanel
 		}
 	}
 	
+	/** Convert this board to string
+	 *  Four digits = one card (shape, color, fill, number)
+	 *  ie) 15 cards -> 60 integers
+	 */
+	public String toString() {
+		String b = "";
+		
+		for(Card c : bu.getBoard()){
+			b += c.toString();
+		}
+		return b;
+	}
 }
