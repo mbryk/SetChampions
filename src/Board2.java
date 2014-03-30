@@ -1,12 +1,14 @@
 package src;
 
 public class Board2 {
-
+	private int countTmp;
+	
 	public Board2(){
-		
+		countTmp = 0;
 	}
 	
-	public void printBoard(){
+	public void printBoard(){ 
+	// For the viewing of the game, server side... (swing)
 		
 	}
 	
@@ -18,5 +20,9 @@ public class Board2 {
 	
 	private void doMove(Move move){
 		
+	}
+	
+	public String toString(){
+		return "This is the board";
 	}
 }
