@@ -22,12 +22,15 @@ public class Game {
 	
 	public void checkMove(PlayerServer player, Move move){
 		if(board.checkMove(move)){
-			addPoint(player);
+			player.points += 3;
+			alertPlayers();
 		}
 	}
 	
-	private void addPoint(PlayerServer player){
-		
+	private void alertPlayers(){
+		for(PlayerServer player : players){
+			player.sendBoard(board);
+		}
 	}
 	
 	public Board2 getBoard(){
