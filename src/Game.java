@@ -9,11 +9,17 @@ public class Game {
 	public Game(){
 		players = new ArrayList<PlayerServer>();
 		board = new Board2();
+		retrievePlayers();
 		startGame();
+	}
+	
+	private void retrievePlayers(){
+		//populate players array
 	}
 	
 	public void addPlayer(PlayerServer player){
 		players.add(player);
+		alertAllNewPlayer();
 	}
 	
 	public void startGame(){
@@ -25,11 +31,20 @@ public class Game {
 			player.points += 3;
 			alertPlayers();
 		}
+		else{
+			//alert player that it was a bad move
+		}
 	}
 	
-	private void alertPlayers(){
+	private void alertAllBoard(){
 		for(PlayerServer player : players){
 			player.sendBoard(board);
+		}
+	}
+	
+	private void alertAllNewPlayer(String name){
+		for(PlayerServer player : players){
+			player.sendPlayerName(name);
 		}
 	}
 	

@@ -19,7 +19,8 @@ public class Board2 {
 	}
 	
 	private void doMove(Move move){
-		
+		//change the board
+		// if no set on new board, change it again
 	}
 	
 	public String toString(){
