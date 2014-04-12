@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Game {
 	private ArrayList<PlayerServer> players;
-	private Board2 board;
+	private Board board;
 	
 	public Game(){
 		players = new ArrayList<PlayerServer>();
-		board = new Board2();
+		board = new Board();
 		retrievePlayers();
 		startGame();
 	}
@@ -19,7 +19,7 @@ public class Game {
 	
 	public void addPlayer(PlayerServer player){
 		players.add(player);
-		alertAllNewPlayer();
+		alertAllNewPlayer(player.getName());
 	}
 	
 	public void startGame(){
@@ -29,7 +29,7 @@ public class Game {
 	public void checkMove(PlayerServer player, Move move){
 		if(board.checkMove(move)){
 			player.points += 3;
-			alertPlayers();
+			alertAllBoard();
 		}
 		else{
 			//alert player that it was a bad move
@@ -48,7 +48,7 @@ public class Game {
 		}
 	}
 	
-	public Board2 getBoard(){
+	public Board getBoard(){
 		return board;
 	}
 }

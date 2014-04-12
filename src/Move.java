@@ -1,9 +1,23 @@
 package src;
 
 public class Move {
-	public int[] cards;
+	public Card[] cards;
+	//Move class has to have array of Card not ints.
+	//You would need knowledge about board to make it ints (position)
 	
 	public Move(){
-		cards = new int[3];
+		cards = new Card[3];
+	}
+	
+	public boolean equals(Move m){
+//		return (cards[0].equals(m.cards[0]) && cards[1].equals(m.cards[1]) && cards[2].equals(m.cards[2])) ||
+//				(cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]))||
+//				(cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]))||
+//				(cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]))||
+//				(cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]))||
+//				(cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0])))
+		// I was going to do this ugly purmutation, but I think my getSets method in BU actually contains all possible
+		//	purmutations of all sets. If not, we can fill in the above abomination..
+		return cards[0].equals(m.cards[0]) && cards[1].equals(m.cards[1]) && cards[2].equals(m.cards[2]); 
 	}
 }

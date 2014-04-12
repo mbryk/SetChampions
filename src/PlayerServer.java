@@ -23,7 +23,7 @@ public class PlayerServer extends Thread {
 	
 	public void run() {
 		System.out.println("Server: Started PlayerServer");
-		Board2 board = game.getBoard();
+		Board board = game.getBoard();
 	    sendBoard(board);
 	    while(true){
 	    	Move move = listenToPlayer(); // Wait for move
@@ -38,7 +38,18 @@ public class PlayerServer extends Thread {
 		try{
 			for(int i=0;i<3;i++){
 				String c = inFromPlayer.readLine();
-				move.cards[i] = Integer.parseInt(c);
+				//This is trickier than I expected.. Since we are only sending card position on Board,
+				//	we can't just do this.
+				//move.cards[i] = Integer.parseInt(c);
+				// Assuming c is the position of card on board,
+				int pos = Integer.parseInt(c);
+				Card card = game.getBoard().getCardAtPos(pos);
+				if(card == null){
+					System.out.println("Error at PlaerServer.listenToPlayer. Move received is out of bounds");
+					throw new IOException();
+				}
+				else
+					move.cards[i] = card;
 			}	
 		} catch(IOException e) {
 			System.err.println("Error Receiving Move: " + e);
@@ -47,7 +58,7 @@ public class PlayerServer extends Thread {
         return move;
 	}
 		
-	public synchronized void sendBoard(Board2 board){
+	public synchronized void sendBoard(Board board){
 		outToPlayer.println(board.toString());
 		//outObject.writeObject(byteBoard);
 	}
