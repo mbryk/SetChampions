@@ -8,28 +8,24 @@ public class Board extends JPanel
 {
 
 	private BoardUtilities bu;
-	public Board()
-	{
-		bu = new BoardUtilities(new Card[21], 9);
+	public Board(){
+		bu = new BoardUtilities(new Card[21], 15);
 		Card[] board = bu.getBoard();
-		for(int j=0; j<5; j++)
-		{
-			for(int i=0; i<3; i++)
-			{
-				System.out.println(board[i*5+j]);
+		for(int j=0; j<5; j++){
+			for(int i=0; i<3; i++){
+				System.out.print(board[i*5+j] + " ");
 			}
 			System.out.println();
 		}
 	}
 	
 	public boolean checkMove(Move move){
-		ArrayList<Card[]> sets = bu.getSets();
-		if(sets.contains(move)){
+		if(bu.getSets().contains(move)){
 			bu.makeMove(move);
 			return true;
 		}
-		else
-			return false;
+		
+		return false;
 	}
 	
 	// Check BU class to see how positions are designated
@@ -46,15 +42,26 @@ public class Board extends JPanel
 	
 	public void printSets()
 	{
-		for(Card[] cards : bu.getSets())
+		for(Move cards : bu.getSets())
 		{
-			System.out.println(cards[0]);
-			System.out.println(cards[1]);
-			System.out.println(cards[2]);
+			System.out.print(cards.cards[0] + " ");
+			System.out.print(cards.cards[1] + " ");
+			System.out.print(cards.cards[2] + " ");
 			System.out.println();
 		}
 	}
 	
+	/**
+	 *  for testing
+	 */
+	public ArrayList<Move> getSets(){
+		return bu.getSets();
+	}
+	
+	//DELETE LATER
+	public BoardUtilities getBU(){
+		return bu;
+	}
 	/** Convert this board to string
 	 *  Four digits = one card (shape, color, fill, number)
 	 *  ie) 15 cards -> 60 integers

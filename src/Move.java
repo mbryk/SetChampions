@@ -16,8 +16,12 @@ public class Move {
 //				(cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]))||
 //				(cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]))||
 //				(cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0]) && cards[0].equals(m.cards[0])))
-		// I was going to do this ugly purmutation, but I think my getSets method in BU actually contains all possible
-		//	purmutations of all sets. If not, we can fill in the above abomination..
+		// I was going to do this ugly permutation, but I think my getSets method in BU actually contains all possible
+		//	permutations of all sets. If not, we can fill in the above abomination..
 		return cards[0].equals(m.cards[0]) && cards[1].equals(m.cards[1]) && cards[2].equals(m.cards[2]); 
+	}
+	
+	public String toString(){
+		return cards[0].toString() + " " + cards[1].toString() + " " + cards[2].toString();
 	}
 }
