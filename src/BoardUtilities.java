@@ -6,7 +6,7 @@ import java.util.Random;
 public class BoardUtilities 
 {
 	private Card[] gameBoard;
-	private int numCardsOnBoard;
+	public int numCardsOnBoard;
 	private int numCardsDeck;
 	private Card[] deck;
 	
@@ -18,6 +18,7 @@ public class BoardUtilities
 	public BoardUtilities(Card[] gb, int nc){
 		gameBoard = gb;
 		numCardsOnBoard = nc;
+		numCardsDeck = 81;
 		deck = new Card[81];
 		generateDeck();
 		for(int i=0; i<nc; i++)
@@ -47,13 +48,13 @@ public class BoardUtilities
 	public void makeMove(Move move){
 		for(int i=0; i<numCardsOnBoard; i++)
 			if(gameBoard[i].equals(move.cards[0]) || gameBoard[i].equals(move.cards[1]) || gameBoard[i].equals(move.cards[2])){
-				gameBoard[i] = deck[numCardsDeck-1];		//Replace the card on board with card in deck
-				deck[numCardsDeck--] = null;				//Remove card replaced in deck
+				gameBoard[i] = deck[--numCardsDeck];		//Replace the card on board with card in deck
+				deck[numCardsDeck] = null;				//Remove card replaced in deck
 			}
 		
 		if (getSets().isEmpty()){
 			for(int i=0; i<3; i++){
-				gameBoard[i+numCardsOnBoard] = deck[numCardsDeck--];
+				gameBoard[numCardsOnBoard++] = deck[numCardsDeck--];
 				deck[numCardsDeck] = null;
 			}
 		}

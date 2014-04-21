@@ -10,13 +10,13 @@ public class Board extends JPanel
 	private BoardUtilities bu;
 	public Board(){
 		bu = new BoardUtilities(new Card[21], 15);
-		Card[] board = bu.getBoard();
-		for(int j=0; j<5; j++){
-			for(int i=0; i<3; i++){
-				System.out.print(board[i*5+j] + " ");
-			}
-			System.out.println();
-		}
+//		Card[] board = bu.getBoard();
+//		for(int i=0; i<3; i++){
+//			for(int j=0; j<5; j++){
+//				System.out.print(board[i*5+j] + " ");
+//			}
+//			System.out.println();
+//		}
 	}
 	
 	public boolean checkMove(Move move){
@@ -28,7 +28,7 @@ public class Board extends JPanel
 		return false;
 	}
 	
-	// Check BU class to see how positions are designated
+	// Check the printBoard method to see how positions are designated
 	public Card getCardAtPos(int p){
 		if(bu.getBoard().length > p)
 			return bu.getBoard()[p];
@@ -38,6 +38,13 @@ public class Board extends JPanel
 	
 	public void printBoard(){
 		// For the viewing of the game, server side... (swing)
+		Card[] board = bu.getBoard();
+		for(int i=0; i<3; i++){
+			for(int j=0; j<5; j++){
+				System.out.print(board[i*5+j] + " ");
+			}
+			System.out.println();
+		}
 	}
 	
 	public void printSets()

@@ -56,7 +56,7 @@ public class Main extends JFrame
 		// TODO Auto-generated method stub
 		Board board = new Board();
 		System.out.println("****************SETS*****************");
-		board.printSets();
+		//board.printSets();
 		Move m1 = new Move();
 		Move m2 = new Move();
 		Move m3 = new Move();
@@ -84,18 +84,13 @@ public class Main extends JFrame
 		m6.cards[1] = new Card(0,1,1,2);
 		m6.cards[2] = new Card(2,1,1,0);
 		
-		// Why is .contains(m5) false when m5 is set.get(0)????????
-		// I don't get this..
-		System.out.println(bu.getSets().contains(m5));
-		System.out.println(m5.equals(bu.getSets().get(0)));
-		System.out.println(bu.getSets().get(0).equals(m5));
 		System.out.println("****************Check Moves*****************");
 		System.out.println("Move1: = " + m1 + " is " + board.checkMove(m1));
 		System.out.println("Move2: = " + m2 + " is " + board.checkMove(m2));
 		System.out.println("Move3: = " + m3 + " is " + board.checkMove(m3));
 		System.out.println("Move4: = " + m4 + " is " + board.checkMove(m4));
 		System.out.println("Move5: = " + m5 + " is " + board.checkMove(m5));
-		//Print moves and checkMove
+		board.printBoard();
 	}
 
 }

@@ -33,13 +33,18 @@ public class PlayerServer extends Thread {
 	    }        
     }
 	
+	/**
+	 * The String from the player should be the POSITION of the chose card on the board.
+	 * Check printBoard() method of Board class
+	 * @return
+	 */
 	private Move listenToPlayer(){
 		Move move = new Move();
 		try{
 			for(int i=0;i<3;i++){
 				String c = inFromPlayer.readLine();
 				//This is trickier than I expected.. Since we are only sending card position on Board,
-				//	we can't just do this.
+				//	we can't just do this:
 				//move.cards[i] = Integer.parseInt(c);
 				// Assuming c is the position of card on board,
 				int pos = Integer.parseInt(c);
