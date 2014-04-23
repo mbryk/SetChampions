@@ -4,20 +4,19 @@ import java.net.*;
 import java.io.*;
 
 public class PlayerServer extends Thread {
-	private Socket socket;
+	// "MACROS"
+	public static int PrintBoard = 1;
+	public static int PrintName = 2;
+	
 	private Game game;
 	private PrintWriter outToPlayer;
-	//private ObjectOutputStream outObject;
 	private BufferedReader inFromPlayer;
 	public int points;
 	
 	public PlayerServer(Socket socket, Game game) throws IOException{
-		this.socket = socket;
 		this.game = game;
-		points = 0;
-		OutputStream outStream = socket.getOutputStream();
-		outToPlayer = new PrintWriter(outStream, true);
-		//outObject = new ObjectOutputStream(outStream);
+		points = 0; // For this game. Also keep track of total points in DB...
+		outToPlayer = new PrintWriter(socket.getOutputStream(), true);
         inFromPlayer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 	
@@ -34,7 +33,7 @@ public class PlayerServer extends Thread {
     }
 	
 	/**
-	 * The String from the player should be the POSITION of the chose card on the board.
+	 * The String from the player should be the POSITION of the chosen card on the board.
 	 * Check printBoard() method of Board class
 	 * @return
 	 */
@@ -50,7 +49,7 @@ public class PlayerServer extends Thread {
 				int pos = Integer.parseInt(c);
 				Card card = game.getBoard().getCardAtPos(pos);
 				if(card == null){
-					System.out.println("Error at PlaerServer.listenToPlayer. Move received is out of bounds");
+					System.out.println("Error at PlayerServer.listenToPlayer. Move received is out of bounds");
 					throw new IOException();
 				}
 				else
@@ -64,8 +63,13 @@ public class PlayerServer extends Thread {
 	}
 		
 	public synchronized void sendBoard(Board board){
+		outToPlayer.println(PrintBoard);
 		outToPlayer.println(board.toString());
-		//outObject.writeObject(byteBoard);
+	}
+	
+	public synchronized void sendPlayerName(String name){
+		outToPlayer.println(PrintName);
+		outToPlayer.println(name);
 	}
 	
 	public boolean equals(){

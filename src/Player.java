@@ -4,15 +4,19 @@ import java.net.*;
 import java.io.*;
 
 public class Player{
+	// "MACROS"
+	public static final int PrintBoard = 1;
+	public static final int PrintName = 2;
+	
 	private static BufferedReader stdin; // Temp. I know all this will be done with Swing
 	private static BufferedReader inFromServer;
 	private static PrintWriter outToServer;
-	private static Board2 board;
+	private static Board2 board; // This will actually be a different board object, than on server side. I assume it will be handled in SWING.
 	
 	public static void main(String[] args){
 		board = new Board2();
 		//int port = Integer.parseInt(args[1]);
-		
+		int msgType; String msgType_str;
 		try{
 			//Socket socket = new Socket(args[0],port);
 			Socket socket = new Socket("localhost",3000);
@@ -25,16 +29,19 @@ public class Player{
 			while(true){ 
 				msgType_str = inFromServer.readLine(); // Wait for incoming Board
 				msgType = Integer.parseInt(msgType_str);
-				if(msgType==1){
-					System.out.println("Player: Receiving New Board");
-					updateBoard();
-				} else if(msgType==2){
-					System.out.println("Player: Receiving New Player Name");
-					updateChatList();
-				} else if(msgType==3){
-					
+				switch(msgType) {
+					case PrintBoard:
+						System.out.println("Player: Receiving New Board");
+						updateBoard();
+						break;
+					case PrintName:
+						System.out.println("Player: Receiving New Player Name");
+						updatePlayerList();
+						break;
+					default:
+						System.err.println("Weird Msg Type");
+						throw new IOException();
 				}
-				
 			}			
 		} catch(IOException e){
 			System.err.println("Player Connection Error: "+e);
@@ -50,6 +57,10 @@ public class Player{
 		} catch(IOException e){
 			System.out.println("Board Reading Error: "+e);
 		}
+	}
+	
+	private static void updatePlayerList(){
+		
 	}
 	
 	private static void parseBoard(String boardString){

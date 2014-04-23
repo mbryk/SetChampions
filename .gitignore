@@ -8,3 +8,6 @@
 # Eclipse Files
 *.classpath
 *.project
+
+# Sublime Files
+*.sublime*
