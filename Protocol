@@ -1,0 +1,28 @@
+Protocol
+
+Client: 
+
+Client sees screen and chooses to either login or register.
+On Both Login & Register: He sends user/pass to server, and waits for yes/no response.
+
+Now, he is logged in, and is entered into the game with 0 gamepoints(gp), and a certain amount of userpoints (up), based on his history.
+
+
+
+
+
+Server:
+Server exists for a single game, for the time being.
+Client connects and server opens up a playerserver. This playerserver reads the username and password and either checks the db or inserts.
+It updates his last logged in time. 
+Now, it will send him his board, and wait to hear a move.
+It will also open up another socket with him, 
+
+
+
+
+	Player <-> Server
+Socket 1 =
+	Move   <-> 
+Socket 2 =
+	       <-> Board + Player List with Point Values

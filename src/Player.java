@@ -24,7 +24,7 @@ public class Player{
 			inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			outToServer = new PrintWriter(socket.getOutputStream(), true);
 			updateBoard();
-			//if move comes (event listener) spawn thread to sendMove() on that other socket....
+			// if move comes (event listener) spawn thread to sendMove() on that other socket....
 			new MoveListener(outToServer).start(); // This is probably reverse from what is actually smart. But we'll be changing all this anyway because of swing. i.e. listening for moves and updating the board
 			while(true){ 
 				msgType_str = inFromServer.readLine(); // Wait for incoming Board
