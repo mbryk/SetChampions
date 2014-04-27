@@ -1,4 +1,4 @@
-package src;
+package client;
 
 public class Board2 {
 	private int countTmp;

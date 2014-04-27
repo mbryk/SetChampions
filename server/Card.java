@@ -1,4 +1,4 @@
-package src;
+package server;
 
 public class Card {
 	private int shape, color, fill, number;

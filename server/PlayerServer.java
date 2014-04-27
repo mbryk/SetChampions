@@ -1,4 +1,4 @@
-package src;
+package server;
 
 import java.net.*;
 import java.io.*;
@@ -11,17 +11,18 @@ public class PlayerServer extends Thread {
 	private Game game;
 	private PrintWriter outToPlayer;
 	private BufferedReader inFromPlayer;
-	public int points;
+	private Player player;	
+	
 	
 	public PlayerServer(Socket socket, Game game) throws IOException{
 		this.game = game;
-		points = 0; // For this game. Also keep track of total points in DB...
 		outToPlayer = new PrintWriter(socket.getOutputStream(), true);
         inFromPlayer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 	
 	public void run() {
 		System.out.println("Server: Started PlayerServer");
+		Player player = findPlayer();
 		Board board = game.getBoard();
 	    sendBoard(board);
 	    while(true){
@@ -31,6 +32,31 @@ public class PlayerServer extends Thread {
 		    System.out.println("Server: Received Move");
 	    }        
     }
+	
+	private Player findPlayer() {
+		Player player = null;
+		String username = inFromPlayer.readLine();
+		String password = inFromPlayer.readLine()
+
+//		check database
+//		if exists {
+//			game.findId(id)
+//		}
+//		else {
+		
+			try{
+				player = new Player();
+			} catch(IOException e){
+				System.err.println(e);
+	            System.exit(-1);
+			}
+			game.addPlayer(player,socket);
+			Database.addPlayer(player);
+//		}
+
+		return player;
+
+	}
 	
 	/**
 	 * The String from the player should be the POSITION of the chosen card on the board.

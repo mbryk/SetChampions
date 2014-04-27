@@ -6,20 +6,20 @@ Client sees screen and chooses to either login or register.
 On Both Login & Register: He sends user/pass to server, and waits for yes/no response.
 
 Now, he is logged in, and is entered into the game with 0 gamepoints(gp), and a certain amount of userpoints (up), based on his history.
-
-
-
+Here's the problem.
+The player needs to listen for new boards, but he also needs to be able to send a move as well. How do you do this in code. What function listens while also waiting. 
+Some type of event listener...
+Don't really want two sockets because thats clunky. Requiring the player to open two sockets when he connects in.....
 
 
 Server:
 Server exists for a single game, for the time being.
 Client connects and server opens up a playerserver. This playerserver reads the username and password and either checks the db or inserts.
 It updates his last logged in time. 
-Now, it will send him his board, and wait to hear a move.
-It will also open up another socket with him, 
+Now, it will send him the board message.
 
-
-
+  
+Board Message = Board.toString() + List of All Players with their point values.
 
 	Player <-> Server
 Socket 1 =

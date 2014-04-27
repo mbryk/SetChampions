@@ -1,4 +1,4 @@
-package src;
+package server;
 
 public class Move {
 	public Card[] cards;
