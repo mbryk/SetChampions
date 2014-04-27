@@ -3,6 +3,8 @@ package client;
 import java.net.*;
 import java.io.*;
 
+import javax.xml.bind.Marshaller.Listener;
+
 public class Player{
 	// "MACROS"
 	public static final int PrintBoard = 1;
@@ -66,5 +68,10 @@ public class Player{
 	private static void parseBoard(String boardString){
 		// Split up by commas, fill in board's member variables...
 		// Or we can just do some object sending, using ObjectReaders... That's not too hard.
+	}
+	
+	private static void logout(){
+		//called by ActionListener
+		outToServer.println(2);// Not a move - I am logging out
 	}
 }

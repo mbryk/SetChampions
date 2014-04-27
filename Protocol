@@ -1,7 +1,6 @@
 Protocol
 
 Client: 
-
 Client sees screen and chooses to either login or register.
 On Both Login & Register: He sends user/pass to server, and waits for yes/no response.
 
@@ -14,15 +13,19 @@ Don't really want two sockets because thats clunky. Requiring the player to open
 
 Server:
 Server exists for a single game, for the time being.
-Client connects and server opens up a playerserver. This playerserver reads the username and password and either checks the db or inserts.
-It updates his last logged in time. 
-Now, it will send him the board message.
+1) new Game() -> creates playerserver array and board object.
+2) wait for players -> new PlayerServer(s,game) for each client connection.
 
+-> PlayerServer = game,socketInfo,player object:
+1) Set Player Object, by getting username and password and checking/inserting into DB.
+2) Send Player the game info.
+3) Add player to game.
+4) Wait For Moves -> checkMove() when receiving new move from player
+
+-> checkMove():
+if yes = sendInfo to all players, by using the playerserver methods.
+	note: this communication is still on the checkMove() thread. the other threads are still listening for moves.
+if no = send "No" to this player
   
-Board Message = Board.toString() + List of All Players with their point values.
 
-	Player <-> Server
-Socket 1 =
-	Move   <-> 
-Socket 2 =
-	       <-> Board + Player List with Point Values
+Info = Board.toString() + List of All Players with their point values.

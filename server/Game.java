@@ -9,46 +9,54 @@ public class Game {
 	public Game(){
 		players = new ArrayList<PlayerServer>();
 		board = new Board();
-		retrievePlayers();
+		// retrievePlayers(); It's not going to work like this. Database stores players. When they connect, we can put them back in, using addPlayer(). Game always starts empty.
 		startGame();
+		// It will now just sit here, waiting to be told about new moves.
 	}
 	
-	private void retrievePlayers(){
-		//populate players array
+	/* private void retrievePlayers(){
+		//populate players array from 
+	} */
+	
+	public void addPlayer(PlayerServer pserver){
+		players.add(pserver);
 	}
 	
-	public void addPlayer(PlayerServer player){
-		players.add(player);
-		alertAllNewPlayer(player.getName());
+	public void removePlayer(PlayerServer pserver){
+		players.remove(pserver);
 	}
 	
 	public void startGame(){
-		board.printBoard();
+		board.printBoard(); // Not really necessary...
 	}
 	
-	public void checkMove(PlayerServer player, Move move){
+	// This must be synchronized. This way, only one PlayerServer can submit a move at a time. (I think.)
+	public synchronized void checkMove(PlayerServer pserver, Move move){
 		if(board.checkMove(move)){
-			player.points += 3;
-			alertAllBoard();
+			pserver.player.addPoints(3);
+			alertAll();
 		}
 		else{
-			//alert player that it was a bad move
+			pserver.badMove(); // This can't be in a return, because we want this to be synchronized as well.
 		}
 	}
 	
-	private void alertAllBoard(){
-		for(PlayerServer player : players){
-			player.sendBoard(board);
-		}
-	}
-	
-	private void alertAllNewPlayer(String name){
-		for(PlayerServer player : players){
-			player.sendPlayerName(name);
+	// Only one PlayerServer will get into checkmove at a time, and it will alert all the other players, using the playerserver objects.
+	// Therefore, this method is also technically synchronized.
+	private void alertAll(){
+		String boardString = board.toString();
+		String playerList = getPlayerList();
+		for(PlayerServer pserver : players){
+			// This will be run on this main thread. The other thread will continue to be 
+			pserver.sendInfo(boardString,playerList);
 		}
 	}
 	
 	public Board getBoard(){
 		return board;
 	}
+	public String getPlayerList(){
+		return "hi";
+	}
+	
 }
