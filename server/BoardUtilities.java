@@ -61,7 +61,10 @@ public class BoardUtilities
 	}
 	
 	public Card[] getBoard(){
-		return gameBoard;
+		// Need to make this only return the cards which exits
+		Card[] boardCards = new Card[numCardsOnBoard];
+		System.arraycopy(gameBoard,0,boardCards,0,numCardsOnBoard);
+		return boardCards;
 	}
 	
 	private boolean checkSet(int i, int j, int k){		

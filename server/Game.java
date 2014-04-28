@@ -9,9 +9,8 @@ public class Game {
 	public Game(){
 		players = new ArrayList<PlayerServer>();
 		board = new Board();
-		// retrievePlayers(); It's not going to work like this. Database stores players. When they connect, we can put them back in, using addPlayer(). Game always starts empty.
 		startGame();
-		// It will now just sit here, waiting to be told about new moves.
+		// Game starts empty. It will now just sit here, waiting for players, waiting to be told about new moves.
 	}
 	
 	/* private void retrievePlayers(){
@@ -20,6 +19,7 @@ public class Game {
 	
 	public void addPlayer(PlayerServer pserver){
 		players.add(pserver);
+		System.out.println("Game: player added");
 	}
 	
 	public void removePlayer(PlayerServer pserver){

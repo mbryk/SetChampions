@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 
 public class Board extends JPanel
 {
-
 	private BoardUtilities bu;
 	public Board(){
 		bu = new BoardUtilities(new Card[21], 15);
@@ -38,12 +37,10 @@ public class Board extends JPanel
 	
 	public void printBoard(){
 		// For the viewing of the game, server side... (swing)
-		Card[] board = bu.getBoard();
-		for(int i=0; i<3; i++){
-			for(int j=0; j<5; j++){
-				System.out.print(board[i*5+j] + " ");
-			}
-			System.out.println();
+		int i=0;
+		for(Card c : bu.getBoard()){
+			System.out.print(c + " ");
+			if(i++==2) {System.out.println();i=0;}
 		}
 	}
 	

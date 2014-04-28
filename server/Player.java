@@ -3,7 +3,7 @@ package server;
 public class Player {
 	private int points;
 	private int id;
-	private String name;
+	public String name;
 
 	public Player() {
 		points = 0; // For this game. Also keep track of total points in DB...
