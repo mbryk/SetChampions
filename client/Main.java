@@ -24,20 +24,19 @@ public class Main extends JFrame
 	private static PrintWriter outToServer;
 	private static boolean gameStarted = false;
 	
-	public Main(final Board board) throws IOException
+	public Main(final Board board, final LogIn signIn) throws IOException
 	{
 		setIconImage(Toolkit.getDefaultToolkit().getImage("SableHead.PNG"));
-		initUI(board);
+		initUI(board, signIn);
 	}
 	
-	private void initUI(final Board board) throws IOException
+	private void initUI(final Board board, final LogIn signIn) throws IOException
 	{
 		
 		JPanel outerFrame = new JPanel();
 		getContentPane().add(outerFrame, BorderLayout.CENTER);
 		outerFrame.setLayout(new CardLayout(0, 0));
 		outerFrame.add(board, "name_512405034174");
-		board.init();
 		JPanel controlPane = new JPanel();
 		getContentPane().add(controlPane, BorderLayout.NORTH);
 		controlPane.setLayout(new BorderLayout(0, 0));
@@ -93,9 +92,9 @@ public class Main extends JFrame
 		setTitle("World Set Championship");
 		setSize(493,297);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);//TODO send correct command to server
 		
-		
+		board.add(signIn);
 		
 	}
 	
@@ -104,12 +103,13 @@ public class Main extends JFrame
 	
 	public static void main(String[] args) throws IOException, Exception, Exception 
 	{
+		final LogIn signIn = new LogIn();
 		final Board board = new Board();
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				Main m = null;
 				try {
-					m = new Main(board);
+					m = new Main(board, signIn);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -119,13 +119,18 @@ public class Main extends JFrame
 		Socket socket = new Socket("localhost",3000);
 		inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		outToServer = new PrintWriter(socket.getOutputStream(), true);
-		outToServer.println("Caleb"); //TODO
+		while(!signIn.attemptSignIn){
+			Thread.sleep(5);
+		}
+		outToServer.println(signIn.username);
+		board.remove(signIn);
+		board.init();
 		gameStarted = true;
 		while(gameStarted){
 			String newBoard = inFromServer.readLine();
 			System.out.println("server: "+newBoard);
 			if(newBoard.length()<3){//is "No" or "Hi" or something
-				//TODO maybe change this
+				//TODO maybe change this, presumably there's a reason these were put in
 				continue;
 			}
 			String newPlayers = inFromServer.readLine();
