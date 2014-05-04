@@ -9,32 +9,35 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import java.awt.GridLayout;
 import java.awt.FlowLayout;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import java.awt.Toolkit;
 
 public class Main extends JFrame
 {
-
-	public Main() throws IOException
+	private static BufferedReader inFromServer;
+	private static PrintWriter outToServer;
+	private static boolean gameStarted = false;
+	
+	public Main(final Board board) throws IOException
 	{
-		initUI();
+		setIconImage(Toolkit.getDefaultToolkit().getImage("SableHead.PNG"));
+		initUI(board);
 	}
 	
-	private void initUI() throws IOException
+	private void initUI(final Board board) throws IOException
 	{
 		
 		JPanel outerFrame = new JPanel();
 		getContentPane().add(outerFrame, BorderLayout.CENTER);
 		outerFrame.setLayout(new CardLayout(0, 0));
-		final Board board = new Board();
 		outerFrame.add(board, "name_512405034174");
-		
+		board.init();
 		JPanel controlPane = new JPanel();
 		getContentPane().add(controlPane, BorderLayout.NORTH);
 		controlPane.setLayout(new BorderLayout(0, 0));
@@ -47,8 +50,10 @@ public class Main extends JFrame
 		JButton btnSet = new JButton("Set!");
 		btnSet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(board.getSelected());
-				//TODO//Call board.getSet and send to Mark
+				if(board.getSelected() != null){
+					outToServer.println("1");
+					outToServer.println(board.getSelected());
+				}
 			}
 		});
 		buttonPane.add(btnSet);
@@ -61,6 +66,18 @@ public class Main extends JFrame
 		});
 		buttonPane.add(shuffleButton);
 		
+		JButton quitButton = new JButton("Exit Room");
+		buttonPane.add(quitButton);
+		quitButton.setBounds(50,60,80,30);
+		
+		quitButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				System.exit(0); //TODO exit to lobby
+			}
+		});
+		
 		JPanel displayPane = new JPanel();
 		controlPane.add(displayPane, BorderLayout.EAST);
 		
@@ -72,48 +89,52 @@ public class Main extends JFrame
 		
 		JLabel lblPlaceYoutotal = new JLabel("Place: you/total");
 		displayPane.add(lblPlaceYoutotal);
-		//panel.setLayout(null);
-		
-		JButton quitButton = new JButton("Quit");
-		quitButton.setBounds(50,60,80,30);
-		
-		quitButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent event)
-			{
-				System.exit(0);
-			}
-		});
-		
-		//panel.add(quitButton);
 		
 		setTitle("World Set Championship");
 		setSize(493,297);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		
+		
 	}
 	
 	
 	
 	
-	public static void main(String[] args) throws IOException 
+	public static void main(String[] args) throws IOException, Exception, Exception 
 	{
-		SwingUtilities.invokeLater(new Runnable() {
+		final Board board = new Board();
+		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				Main m = null;
 				try {
-					m = new Main();
+					m = new Main(board);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				m.setVisible(true);
 			}
 		});
-		// TODO Auto-generated method stub
-		Board board = new Board();
-		System.out.println("****************SETS*****************");
-		board.printSets();
+
+		Socket socket = new Socket("localhost",3000);
+		inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		outToServer = new PrintWriter(socket.getOutputStream(), true);
+		outToServer.println("Caleb"); //TODO
+		gameStarted = true;
+		//TODO change this?
+		while(gameStarted){
+			String newBoard = inFromServer.readLine();
+			System.out.println("server: "+newBoard);
+			if(newBoard.length()<3){//is "No" or "Hi" or something
+				//TODO maybe change this
+				continue;
+			}
+			String newPlayers = inFromServer.readLine();
+			System.out.println("server: "+newPlayers);
+			board.updateBoard(newBoard);
+			board.updatePlayers(newPlayers);
+		}
 	}
 
 }

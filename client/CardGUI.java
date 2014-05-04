@@ -26,6 +26,7 @@ public class CardGUI extends JPanel implements ComponentListener
 {
 	Border selected  = new CompoundBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), new LineBorder(new Color(0, 0, 255),2));
 	Border notSelected  = new BevelBorder(BevelBorder.LOWERED, null, null, null, null);
+	Border newCard = new CompoundBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), new LineBorder(Color.yellow,2));
 	JLabel cardPic;
 	BufferedImage cardPNG;
 	int shape;
@@ -89,11 +90,14 @@ public class CardGUI extends JPanel implements ComponentListener
 		
 	}
 	public void toggleBorder(){
-		if(this.getBorder() == notSelected){
-			this.setBorder(selected);
-		}else{
+		if(this.getBorder() == selected){
 			this.setBorder(notSelected);
+		}else{
+			this.setBorder(selected);
 		}
+	}
+	public void setNewCardBorder(){
+		this.setBorder(newCard);
 	}
 	@Override
 	public void componentHidden(ComponentEvent e) {
@@ -116,5 +120,58 @@ public class CardGUI extends JPanel implements ComponentListener
 	}
 	public Card getCard(){
 		return new Card(shape, color, filled, number);
+	}
+	public void removePic(){
+		remove(cardPic);
+	}
+	public void resetPic() throws IOException{
+		remove(cardPic);
+		String path = "setCards/";
+		//number
+		if(number==0){
+			path+="one/";
+		}
+		if(number==1){
+			path+="two/";
+		}
+		if(number==2){
+			path+="three/";
+		}
+		//color
+		if(color==0){
+			path+="red/";
+		}
+		if(color==1){
+			path+="green/";
+		}
+		if(color==2){
+			path+="purple/";
+		}
+		//shape
+		if(shape==0){
+			path+="diamond/";
+		}
+		if(shape==1){
+			path+="wavy/";
+		}
+		if(shape==2){
+			path+="oval/";
+		}
+		//filled
+		if(filled==0){
+			path+="clear/";
+		}
+		if(filled==1){
+			path+="shaded/";
+		}
+		if(filled==2){
+			path+="solid/";
+		}
+		path+="card.PNG";
+		//now we have the path, add the picture
+		cardPNG = ImageIO.read(new File(path));
+		cardPic = new JLabel(new ImageIcon(cardPNG.getScaledInstance(getWidth(), getHeight(), 1)));
+		add(cardPic);
+		
 	}
 }

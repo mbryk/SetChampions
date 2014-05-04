@@ -3,12 +3,7 @@ package client;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -22,40 +17,16 @@ public class Board extends JPanel
 	CardGUI card1 = null;
 	CardGUI card2 = null;
 	CardGUI card3 = null;
-	private BoardUtilities bu;
 	Random rand = new Random();
 	public Board() throws IOException
 	{
-		setLayout(new GridLayout(3,7));
-		bu = new BoardUtilities(new Card[21]);
-		Card[] board = bu.getBoard();
-		for(int j=0; j<5; j++)
-		{
-			for(int i=0; i<3; i++)
-			{
-				System.out.println(board[i*5+j]);
-				CardGUI card = new CardGUI(board[i*5+j].getShape(), board[i*5+j].getNumber(), board[i*5+j].getColor(), board[i*5+j].getFill());
-				ClickListener clicked = new ClickListener(card);
-				card.addMouseListener(clicked);
-				cardsInPlay.add(card);
-			}
-			System.out.println();
-		}
-		for(int i=0; i< cardsInPlay.size(); ++i){
-			this.add(cardsInPlay.get(i));
-		}
+		
 	}
 	
-	public void printSets()
-	{
-		for(Card[] cards : bu.getSets())
-		{
-			System.out.println(cards[0]);
-			System.out.println(cards[1]);
-			System.out.println(cards[2]);
-			System.out.println();
-		}
+	public void init(){
+		this.setLayout(new GridLayout(3,7));
 	}
+	
 	public class ClickListener implements MouseListener {
 		CardGUI thisCard;
 
@@ -107,7 +78,7 @@ public class Board extends JPanel
 		
 	}
 	public void shuffle(){
-		int num = getComponentCount();
+		int num = this.getComponentCount();
 		int ind;
 		Component swap;
 		for(int i = 0; i < num*2; ++i){
@@ -119,16 +90,63 @@ public class Board extends JPanel
 		validate();
 		repaint();
 	}
-	public ArrayList<Card> getSelected(){
-		ArrayList<Card> possibleSet = new ArrayList<Card>();
+	public String getSelected(){
 		if(card1 != null && card2 != null && card3 != null){
-			possibleSet.add(card1.getCard());
-			possibleSet.add(card2.getCard());
-			possibleSet.add(card3.getCard());
-			return possibleSet;
+			return String.valueOf(cardsInPlay.indexOf(card1)) +"\n" + String.valueOf(cardsInPlay.indexOf(card2)) + "\n" + String.valueOf(cardsInPlay.indexOf(card3));
 		}else{
 			return null;
 		}
+	}
+	public void updateBoard(String board) throws IOException{
+		if(cardsInPlay.isEmpty()){//set up board for the first time
+			for(int pos = 0; pos < board.length(); pos = pos+4){
+				CardGUI card = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
+				ClickListener clicked = new ClickListener(card);
+				card.addMouseListener(clicked);
+				cardsInPlay.add(card);
+				add(card);
+			}
+		}else{//change only the new cards
+			for(int i = 0; i < cardsInPlay.size(); ++i){
+				if(cardsInPlay.get(i).shape != Integer.parseInt(board.substring(i*4,i*4+1)) || cardsInPlay.get(i).number != Integer.parseInt(board.substring(i*4+1,i*4+2)) || cardsInPlay.get(i).color != Integer.parseInt(board.substring(i*4+2,i*4+3)) || cardsInPlay.get(i).filled != Integer.parseInt(board.substring(i*4+3,i*4+4))){//card is different
+					//card is different - reset card
+					cardsInPlay.get(i).shape = Integer.parseInt(board.substring(i*4,i*4+1));
+					cardsInPlay.get(i).number = Integer.parseInt(board.substring(i*4+1,i*4+2));
+					cardsInPlay.get(i).color = Integer.parseInt(board.substring(i*4+2,i*4+3));
+					cardsInPlay.get(i).filled = Integer.parseInt(board.substring(i*4+3,i*4+4));
+					cardsInPlay.get(i).resetPic();
+					cardsInPlay.get(i).setNewCardBorder();
+					card1 = null;
+					card2 = null;
+					card3 = null;
+				}
+			}
+			while(board.length() > 4*cardsInPlay.size()){//we need to add cards to the board - either 3, 6, or 9 of them
+				int pos = 4*cardsInPlay.size() - 1;
+				CardGUI card = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
+				ClickListener clicked = new ClickListener(card);
+				card.addMouseListener(clicked);
+				cardsInPlay.add(card);
+				add(card);
+			}
+			if(board.length() < 4*cardsInPlay.size()){//we need to remove the selected cards from the board
+				card1.setNewCardBorder();
+				card2.setNewCardBorder();
+				card3.setNewCardBorder();
+				card1.removePic();
+				card2.removePic();
+				card3.removePic();
+				card1 = null;
+				card2 = null;
+				card3 = null;
+			}
+		}
+		validate();
+		repaint();
+	}
+	public void updatePlayers(String players){
+		//TODO make this do something useful
+		System.out.println("players: "+players);
 	}
 	
 }

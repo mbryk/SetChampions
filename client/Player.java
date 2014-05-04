@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 
 import javax.xml.bind.Marshaller.Listener;
-
+/*
 public class Player{
 	// "MACROS"
 	public static final int PrintBoard = 1;
@@ -75,3 +75,4 @@ public class Player{
 		outToServer.println(2);// Not a move - I am logging out
 	}
 }
+*/

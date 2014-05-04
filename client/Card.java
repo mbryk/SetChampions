@@ -34,8 +34,6 @@ public class Card
 	
 	public String toString()
 	{
-		return 
-				"Color: " + color + "      " + "Shape: " + shape+ "      " + 
-				"Fill: " + fill+ "       " + "Number: " + number;
+		return String.valueOf(shape) + String.valueOf(number) + String.valueOf(color) + String.valueOf(fill);
 	}
 }
