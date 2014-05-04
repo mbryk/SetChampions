@@ -7,13 +7,14 @@ public class PlayerServer extends Thread {
 	// This guy creates the Player Object and enters him into the game.
 	// He also controls all communication with the Client (although not necessarily in THIS thread. He can get called by another PlayerServer thread, when it gets a move right.) 
 
+	private Lobby lobby;
 	private Game game;
 	private PrintWriter outToPlayer;
 	private BufferedReader inFromPlayer;
 	public Player player;	
 	
-	public PlayerServer(Socket socket, Game game) throws IOException{
-		this.game = game;
+	public PlayerServer(Socket socket, Lobby lobby) throws IOException{
+		this.lobby = lobby;
 		outToPlayer = new PrintWriter(socket.getOutputStream(), true);
         inFromPlayer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.player = new Player();
@@ -25,27 +26,42 @@ public class PlayerServer extends Thread {
 		try{player.name = inFromPlayer.readLine();}
 		catch(IOException e){};
 		System.out.println("Got Player Name: "+player.name);
+		boolean play = true;
+		String gameIDstr = null;
+		
+		while(play){
+			outToPlayer.println(lobby);
+			
+			try{
+				gameIDstr = inFromPlayer.readLine();
+			} catch(IOException e){};
+			int gameID = Integer.parseInt(gameIDstr);
+			game = lobby.getGame(gameID);
 
-		// Ready to play
-		Board board = game.getBoard();
-	    sendInfo(board.toString(),game.getPlayerList());
-	    System.out.println("Sent Game Info");
-		game.addPlayer(this);
-	    
-		String typeStr = null; int type;
-	    while(true){
-	    	try{ typeStr = inFromPlayer.readLine();}
-	    	catch(IOException e){};
-	    	type = Integer.parseInt(typeStr);
-	    	if(type==1){ // move
-	    		Move move = listenToPlayer(); // Wait for move
-	    		System.out.println("Server: Received Move");
-	    		game.checkMove(this,move);
-	    	} else if(type==2){ // logout
-	    		game.removePlayer(this);
-	    		break;
-	    	}
-	    }        
+			// Ready to play
+			Board board = game.getBoard();
+			sendInfo(board.toString(),game.getPlayerList());
+			System.out.println("Sent Game Info");
+			game.addPlayer(this);
+
+			String typeStr = null; int type;
+			while(true){
+				try{ typeStr = inFromPlayer.readLine();}
+				catch(IOException e){};
+				type = Integer.parseInt(typeStr);
+				if(type==1){ // move
+					Move move = listenToPlayer(); // Wait for move
+					System.out.println("Server: Received Move");
+					game.checkMove(this,move);
+				} else{
+					game.removePlayer(this);
+					//type 2 = quit game
+					if(type==3) // exit
+						play=false;
+					break;
+				}
+			}
+		}
     }
 	
 	/**
@@ -56,13 +72,14 @@ public class PlayerServer extends Thread {
 	private Move listenToPlayer(){
 		Move move = new Move();
 		try{
-			int pos; Card card;
+			int pos; Card card; String c;
 			for(int i=0;i<3;i++){
-				String c = inFromPlayer.readLine();
+				c = inFromPlayer.readLine();
 				//This is trickier than I expected.. Since we are only sending card position on Board,
 				//	we can't just do this:
 				//move.cards[i] = Integer.parseInt(c);
 				// Assuming c is the position of card on board,
+				System.out.println(c);
 				pos = Integer.parseInt(c);
 				card = game.getBoard().getCardAtPos(pos);
 				if(card == null){

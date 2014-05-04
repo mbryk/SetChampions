@@ -66,6 +66,11 @@ public class Board extends JPanel
 	public BoardUtilities getBU(){
 		return bu;
 	}
+	
+	public int getCardsLeft(){
+		return bu.numCardsDeck;
+	}
+	
 	/** Convert this board to string
 	 *  Four digits = one card (shape, color, fill, number)
 	 *  ie) 15 cards -> 60 integers

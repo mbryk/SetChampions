@@ -5,17 +5,14 @@ import java.util.ArrayList;
 public class Game {
 	private ArrayList<PlayerServer> players;
 	private Board board;
+	private int id;
 	
-	public Game(){
+	public Game(int id){
+		this.id = id;
 		players = new ArrayList<PlayerServer>();
 		board = new Board();
 		startGame();
-		// Game starts empty. It will now just sit here, waiting for players, waiting to be told about new moves.
 	}
-	
-	/* private void retrievePlayers(){
-		//populate players array from 
-	} */
 	
 	public void addPlayer(PlayerServer pserver){
 		players.add(pserver);
@@ -28,11 +25,13 @@ public class Game {
 	
 	public void startGame(){
 		board.printBoard(); // Not really necessary...
+		board.printSets(); //TEMP - Also unnecessary
 	}
 	
 	// This must be synchronized. This way, only one PlayerServer can submit a move at a time. (I think.)
 	public synchronized void checkMove(PlayerServer pserver, Move move){
 		if(board.checkMove(move)){
+			board.printSets(); //TEMP
 			pserver.player.addPoints(3);
 			alertAll();
 		}
@@ -56,7 +55,18 @@ public class Game {
 		return board;
 	}
 	public String getPlayerList(){
-		return "hi";
+		String playerList = "";
+		for(PlayerServer pserver : players){
+			playerList += pserver.player.name+";"+pserver.player.getPoints()+";";
+		}
+		return playerList;
+	}
+	
+	public String toString(){
+		String game = id+";";
+		game += board.getCardsLeft()+";";
+		game += getPlayerList();
+		return game;
 	}
 	
 }

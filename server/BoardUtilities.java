@@ -7,7 +7,7 @@ public class BoardUtilities
 {
 	private Card[] gameBoard;
 	public int numCardsOnBoard;
-	private int numCardsDeck;
+	public int numCardsDeck;
 	private Card[] deck;
 	
 	/**
