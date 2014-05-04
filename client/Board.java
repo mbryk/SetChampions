@@ -17,6 +17,7 @@ public class Board extends JPanel
 	CardGUI card1 = null;
 	CardGUI card2 = null;
 	CardGUI card3 = null;
+	ArrayList<CardGUI> newCards = new ArrayList<CardGUI>();
 	Random rand = new Random();
 	public Board() throws IOException
 	{
@@ -107,6 +108,11 @@ public class Board extends JPanel
 				add(card);
 			}
 		}else{//change only the new cards
+			//first, if any cards still have the newCard border, we must get rid of it
+			for(int i = 0; i<newCards.size(); ++i){
+				newCards.get(i).resetBorder();
+			}
+			newCards.clear();
 			for(int i = 0; i < cardsInPlay.size(); ++i){
 				if(cardsInPlay.get(i).shape != Integer.parseInt(board.substring(i*4,i*4+1)) || cardsInPlay.get(i).number != Integer.parseInt(board.substring(i*4+1,i*4+2)) || cardsInPlay.get(i).color != Integer.parseInt(board.substring(i*4+2,i*4+3)) || cardsInPlay.get(i).filled != Integer.parseInt(board.substring(i*4+3,i*4+4))){//card is different
 					//card is different - reset card
@@ -116,6 +122,7 @@ public class Board extends JPanel
 					cardsInPlay.get(i).filled = Integer.parseInt(board.substring(i*4+3,i*4+4));
 					cardsInPlay.get(i).resetPic();
 					cardsInPlay.get(i).setNewCardBorder();
+					newCards.add(cardsInPlay.get(i));
 					card1 = null;
 					card2 = null;
 					card3 = null;
@@ -127,7 +134,9 @@ public class Board extends JPanel
 				ClickListener clicked = new ClickListener(card);
 				card.addMouseListener(clicked);
 				cardsInPlay.add(card);
+				newCards.add(card);
 				add(card);
+				card.setNewCardBorder();
 			}
 			if(board.length() < 4*cardsInPlay.size()){//we need to remove the selected cards from the board
 				card1.setNewCardBorder();
@@ -136,6 +145,9 @@ public class Board extends JPanel
 				card1.removePic();
 				card2.removePic();
 				card3.removePic();
+				newCards.add(card1);
+				newCards.add(card2);
+				newCards.add(card3);
 				card1 = null;
 				card2 = null;
 				card3 = null;

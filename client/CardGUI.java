@@ -96,6 +96,9 @@ public class CardGUI extends JPanel implements ComponentListener
 			this.setBorder(selected);
 		}
 	}
+	public void resetBorder(){
+		this.setBorder(notSelected);
+	}
 	public void setNewCardBorder(){
 		this.setBorder(newCard);
 	}

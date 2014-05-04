@@ -116,13 +116,11 @@ public class Main extends JFrame
 				m.setVisible(true);
 			}
 		});
-
 		Socket socket = new Socket("localhost",3000);
 		inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		outToServer = new PrintWriter(socket.getOutputStream(), true);
 		outToServer.println("Caleb"); //TODO
 		gameStarted = true;
-		//TODO change this?
 		while(gameStarted){
 			String newBoard = inFromServer.readLine();
 			System.out.println("server: "+newBoard);
