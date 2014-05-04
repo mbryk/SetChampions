@@ -81,7 +81,14 @@ public class LogIn extends JPanel {
 		if(textField.getText().length() > 0 && passwordField.getPassword().length > 0){ //instead of testing if it equals null, because of newline characters
 			username = textField.getText();
 			password = String.valueOf(passwordField.getPassword());
-			attemptSignIn = true;
+			
+			boolean register = true;    //EDIT THIS
+			
+			if (register)
+				attemptSignIn = LoginDAO.register(username, password);
+			else
+				attemptSignIn = LoginDAO.login(username, password);
+			
 		}else{
 			attemptSignIn = false;
 		}
