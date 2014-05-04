@@ -25,6 +25,26 @@ public class BoardUtilities
 				gameBoard[i] = deck[i];
 	}
 	
+	public void setBoard(String setBoard){
+		String card;
+		int cardNumber=0;
+		int i = 0; int j;
+		while(i<setBoard.length()){
+			card = setBoard.substring(i, i+4);
+			for(j=cardNumber; j<numCardsDeck; j++){
+				if(card.equals(deck[j].toString())){
+					System.out.println(card+" switched in at pos "+cardNumber);
+					swap(cardNumber,j);
+					break;
+				}
+			}
+			i+=4;
+			cardNumber++;
+		}	
+		for(i=0; i<numCardsOnBoard; i++)
+			gameBoard[i] = deck[i];
+	}
+	
 	/**
 	 * Returns all possible sets in the current gameBoard. If there are none, adds three more cards to the board
 	 */

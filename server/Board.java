@@ -8,7 +8,7 @@ public class Board extends JPanel
 {
 	private BoardUtilities bu;
 	public Board(){
-		bu = new BoardUtilities(new Card[21], 15);
+		bu = new BoardUtilities(new Card[21], 12);
 //		Card[] board = bu.getBoard();
 //		for(int i=0; i<3; i++){
 //			for(int j=0; j<5; j++){
@@ -16,6 +16,11 @@ public class Board extends JPanel
 //			}
 //			System.out.println();
 //		}
+	}
+	
+	public void setBoard(String setBoard){
+		bu.setBoard(setBoard);
+		System.out.println(this);
 	}
 	
 	public boolean checkMove(Move move){

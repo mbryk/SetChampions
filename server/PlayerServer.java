@@ -39,7 +39,9 @@ public class PlayerServer extends Thread {
 			game = lobby.getGame(gameID);
 
 			// Ready to play
+			
 			Board board = game.getBoard();
+			//board.setBoard("201221001222200020110011012121020021021001202202");
 			sendInfo(board.toString(),game.getPlayerList());
 			System.out.println("Sent Game Info");
 			game.addPlayer(this);
@@ -75,10 +77,6 @@ public class PlayerServer extends Thread {
 			int pos; Card card; String c;
 			for(int i=0;i<3;i++){
 				c = inFromPlayer.readLine();
-				//This is trickier than I expected.. Since we are only sending card position on Board,
-				//	we can't just do this:
-				//move.cards[i] = Integer.parseInt(c);
-				// Assuming c is the position of card on board,
 				System.out.println(c);
 				pos = Integer.parseInt(c);
 				card = game.getBoard().getCardAtPos(pos);
