@@ -116,6 +116,30 @@ public class Board extends JPanel
 			for(int i = 0; i < cardsInPlay.size(); ++i){
 				if(cardsInPlay.get(i).shape != Integer.parseInt(board.substring(i*4,i*4+1)) || cardsInPlay.get(i).number != Integer.parseInt(board.substring(i*4+1,i*4+2)) || cardsInPlay.get(i).color != Integer.parseInt(board.substring(i*4+2,i*4+3)) || cardsInPlay.get(i).filled != Integer.parseInt(board.substring(i*4+3,i*4+4))){//card is different
 					//card is different - reset card
+					//check if card1,2,or 3 was removed
+					if(cardsInPlay.get(i) == card3){
+						card3 = null;
+					}
+					if(cardsInPlay.get(i) == card2){
+						if(card3 != null){
+							card2 = card3;
+							card3 = null;
+						}else{
+							card2 = null;
+						}
+					}
+					if(cardsInPlay.get(i) == card1){
+						if(card3 != null){
+							card1 = card2;
+							card2 = card3;
+							card3 = null;
+						}else if(card2 != null){
+								card1 = card2;
+								card2 = null;
+						}else{
+							card1 = null;
+						}
+					}
 					cardsInPlay.get(i).shape = Integer.parseInt(board.substring(i*4,i*4+1));
 					cardsInPlay.get(i).number = Integer.parseInt(board.substring(i*4+1,i*4+2));
 					cardsInPlay.get(i).color = Integer.parseInt(board.substring(i*4+2,i*4+3));
@@ -123,9 +147,6 @@ public class Board extends JPanel
 					cardsInPlay.get(i).resetPic();
 					cardsInPlay.get(i).setNewCardBorder();
 					newCards.add(cardsInPlay.get(i));
-					card1 = null;
-					card2 = null;
-					card3 = null;
 				}
 			}
 			while(board.length() > 4*cardsInPlay.size()){//we need to add cards to the board - either 3, 6, or 9 of them
@@ -139,18 +160,45 @@ public class Board extends JPanel
 				card.setNewCardBorder();
 			}
 			if(board.length() < 4*cardsInPlay.size()){//we need to remove the selected cards from the board
-				card1.setNewCardBorder();
-				card2.setNewCardBorder();
-				card3.setNewCardBorder();
-				card1.removePic();
-				card2.removePic();
-				card3.removePic();
-				newCards.add(card1);
-				newCards.add(card2);
-				newCards.add(card3);
-				card1 = null;
-				card2 = null;
-				card3 = null;
+				boolean cardfound;
+				for(int i = 0; i < cardsInPlay.size(); ++i){
+					cardfound = false;
+					for(int j = 0; j < cardsInPlay.size(); j = j + 4){
+						if(cardsInPlay.get(i).shape == Integer.parseInt(board.substring(j, j + 1)) && cardsInPlay.get(i).number == Integer.parseInt(board.substring(j + 1,j + 2)) && cardsInPlay.get(i).color != Integer.parseInt(board.substring(j + 2, j + 3)) && cardsInPlay.get(i).filled != Integer.parseInt(board.substring(j + 3, j + 4))){
+							cardfound = true;
+							break;
+						}
+					}
+					if(!cardfound){
+						cardsInPlay.get(i).setNewCardBorder();
+						cardsInPlay.get(i).removePic();
+						newCards.add(cardsInPlay.get(i));
+						//reset card1, 2, or 3
+						if(cardsInPlay.get(i) == card3){
+							card3 = null;
+						}
+						if(cardsInPlay.get(i) == card2){
+							if(card3 != null){
+								card2 = card3;
+								card3 = null;
+							}else{
+								card2 = null;
+							}
+						}
+						if(cardsInPlay.get(i) == card1){
+							if(card3 != null){
+								card1 = card2;
+								card2 = card3;
+								card3 = null;
+							}else if(card2 != null){
+									card1 = card2;
+									card2 = null;
+							}else{
+								card1 = null;
+							}
+						}
+					}
+				}
 			}
 		}
 		validate();
