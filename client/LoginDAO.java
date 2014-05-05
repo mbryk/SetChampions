@@ -10,7 +10,7 @@ public class LoginDAO {
 
 	public static boolean login(String username, String password) {
 		Statement stmt = null;
-		String searchQuery = "select * from users where uname='" + username
+		String searchQuery = "select * from allUsers where uname='" + username
 				+ "' AND password='" + password + "'";
 
 		try {
