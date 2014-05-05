@@ -2,6 +2,7 @@ package client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,8 +14,7 @@ import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-
+import java.awt.event.*;
 import javax.swing.JSeparator;
 import java.awt.Toolkit;
 
@@ -23,6 +23,7 @@ public class Main extends JFrame
 	private static BufferedReader inFromServer;
 	private static PrintWriter outToServer;
 	private static boolean gameStarted = false;
+	private static boolean ingame = false;
 	
 	public Main(final Board board, final LogIn signIn) throws IOException
 	{
@@ -73,7 +74,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent event)
 			{
-				System.exit(0); //TODO exit to lobby
+				outToServer.println("2");
 			}
 		});
 		
@@ -92,19 +93,48 @@ public class Main extends JFrame
 		setTitle("World Set Championship");
 		setSize(493,297);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);//TODO send correct command to server
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		addWindowListener(new ExitListener()); //TODO test that works
 		
 		board.add(signIn);
 		
 	}
 	
-	
+	public class ExitListener implements WindowListener{
+
+		@Override
+		public void windowActivated(WindowEvent arg0) {
+		}
+		@Override
+		public void windowClosed(WindowEvent arg0) {
+		}
+		@Override
+		public void windowClosing(WindowEvent arg0) {
+			if(ingame){//is in the middle of a game
+				outToServer.println("3");
+			}
+		}
+		@Override
+		public void windowDeactivated(WindowEvent arg0) {	
+		}
+		@Override
+		public void windowDeiconified(WindowEvent arg0) {	
+		}
+		@Override
+		public void windowIconified(WindowEvent arg0) {	
+		}
+		@Override
+		public void windowOpened(WindowEvent arg0) {
+		}
+	}
 	
 	
 	public static void main(String[] args) throws IOException, Exception, Exception 
 	{
 		final LogIn signIn = new LogIn();
 		final Board board = new Board();
+		final Lobby lobby = new Lobby();
+		int gameNum;
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				Main m = null;
@@ -124,13 +154,20 @@ public class Main extends JFrame
 		}
 		outToServer.println(signIn.username);
 		board.remove(signIn);
+		board.add(lobby);//TODO ALL WRONG
+		String availableGames = inFromServer.readLine();
+		while(!ingame){
+			System.out.println("waiting");
+		}
+		board.remove(lobby);
 		board.init();
+		//TODO remove
+		outToServer.println("0");
 		gameStarted = true;
 		while(gameStarted){
 			String newBoard = inFromServer.readLine();
-			System.out.println("server: "+newBoard);
 			if(newBoard.length()<3){//is "No" or "Hi" or something
-				//TODO maybe change this, presumably there's a reason these were put in
+				//TODO change this to get rid of bad set
 				continue;
 			}
 			String newPlayers = inFromServer.readLine();
