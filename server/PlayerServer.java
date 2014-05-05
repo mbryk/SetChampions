@@ -58,8 +58,10 @@ public class PlayerServer extends Thread {
 				} else{
 					game.removePlayer(this);
 					//type 2 = quit game
-					if(type==3) // exit
+					if(type==3){ // exit
+						outToPlayer.println("Goodbye");
 						play=false;
+					}
 					break;
 				}
 			}
