@@ -49,7 +49,7 @@ public class LoginDAO {
 			boolean userExists = res.next();
 
 			if (!userExists) {
-				String registerQuery = "insert into allUsers (username, password, score) values"
+				String registerQuery = "insert into allUsers (uname, password, score) values"
 										+ "('" + username + "', '" + password + "', '" + "0" + "');";
 				int retVal = stmt.executeUpdate(registerQuery);
 				if (retVal != 0) {
