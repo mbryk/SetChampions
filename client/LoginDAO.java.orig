@@ -10,7 +10,11 @@ public class LoginDAO {
 
 	public static boolean login(String username, String password) {
 		Statement stmt = null;
+<<<<<<< HEAD
 		String searchQuery = "select * from allUsers where uname='" + username
+=======
+		String searchQuery = "select * from users where uname='" + username
+>>>>>>> 1251622ab8795bf25a0171407b49375c9e889dcf
 				+ "' AND password='" + password + "'";
 
 		try {
@@ -38,7 +42,7 @@ public class LoginDAO {
 	
 	public static boolean register(String username, String password) {
 		Statement stmt = null;
-		String searchQuery = "select * from allUsers where uname='" + username
+		String searchQuery = "select * from users where uname='" + username
 				+ "' AND password='" + password + "'";
 		try {
 			if (currentCon == null)
