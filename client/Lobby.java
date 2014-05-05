@@ -1,7 +1,6 @@
 package client;
 
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -40,7 +39,7 @@ public class Lobby extends JPanel{
 		gbc_btnEnterGame.gridy = 0;
 		add(btnEnterGame, gbc_btnEnterGame);
 		
-		JList list = new JList();
+		JList<String> list = new JList<String>();
 		GridBagConstraints gbc_list = new GridBagConstraints();
 		gbc_list.gridwidth = 3;
 		gbc_list.insets = new Insets(0, 0, 5, 5);

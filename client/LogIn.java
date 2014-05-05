@@ -14,6 +14,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.border.EtchedBorder;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import javax.swing.JCheckBox;
 
 public class LogIn extends JPanel {
 	String username = null;
@@ -22,13 +25,15 @@ public class LogIn extends JPanel {
 	private JTextField textField;
 	private JPasswordField passwordField;
 	Button button;
+	private JPanel panel;
+	private JCheckBox registerBox;
 	public LogIn() {
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{25, 81, 100, 25, 0};
-		gridBagLayout.rowHeights = new int[]{30, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowHeights = new int[]{30, 0, 0, 51, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 
@@ -71,6 +76,18 @@ public class LogIn extends JPanel {
 				submit();
 			}
 		});
+		
+		panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 1;
+		gbc_panel.gridy = 4;
+		add(panel, gbc_panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		registerBox = new JCheckBox("New user");
+		panel.add(registerBox);
 		GridBagConstraints gbc_button = new GridBagConstraints();
 		gbc_button.insets = new Insets(0, 0, 5, 5);
 		gbc_button.gridx = 2;
@@ -82,7 +99,7 @@ public class LogIn extends JPanel {
 			username = textField.getText();
 			password = String.valueOf(passwordField.getPassword());
 			
-			boolean register = true;    //EDIT THIS
+			boolean register = registerBox.isSelected();
 			
 			if (register)
 				attemptSignIn = LoginDAO.register(username, password);
