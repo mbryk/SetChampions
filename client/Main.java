@@ -10,12 +10,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.io.*;
 import java.net.Socket;
 import java.awt.event.*;
 import javax.swing.JSeparator;
+import javax.swing.border.*;
+
 import java.awt.Toolkit;
 
 public class Main extends JFrame
@@ -24,7 +28,11 @@ public class Main extends JFrame
 	private static PrintWriter outToServer;
 	private static boolean gameStarted = false;
 	private static boolean ingame = false;
-	
+	private static Lobby lobby = new Lobby();
+	private static JPanel outerFrame;
+	private static JPanel buttonPane;
+	private static JButton btnSet;
+	private static Color defaultColor;
 	public Main(final Board board, final LogIn signIn) throws IOException
 	{
 		setIconImage(Toolkit.getDefaultToolkit().getImage("SableHead.PNG"));
@@ -34,7 +42,9 @@ public class Main extends JFrame
 	private void initUI(final Board board, final LogIn signIn) throws IOException
 	{
 		
-		JPanel outerFrame = new JPanel();
+		outerFrame = new JPanel();
+		outerFrame.add(lobby);
+		lobby.setVisible(false);
 		getContentPane().add(outerFrame, BorderLayout.CENTER);
 		outerFrame.setLayout(new CardLayout(0, 0));
 		outerFrame.add(board, "name_512405034174");
@@ -42,14 +52,17 @@ public class Main extends JFrame
 		getContentPane().add(controlPane, BorderLayout.NORTH);
 		controlPane.setLayout(new BorderLayout(0, 0));
 		
-		JPanel buttonPane = new JPanel();
+		buttonPane = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) buttonPane.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		controlPane.add(buttonPane);
 		
-		JButton btnSet = new JButton("Set!");
+		btnSet = new JButton("   Set!   ");
+		defaultColor = btnSet.getBackground();
+		//defaultBorder = btnSet.getBorder();
 		btnSet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				btnSet.setBackground(defaultColor);
 				if(board.getSelected() != null){
 					outToServer.println("1");
 					outToServer.println(board.getSelected());
@@ -58,7 +71,7 @@ public class Main extends JFrame
 		});
 		buttonPane.add(btnSet);
 		
-		JButton shuffleButton = new JButton("Shuffle");
+		JButton shuffleButton = new JButton("   Shuffle   ");
 		shuffleButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				board.shuffle();
@@ -66,7 +79,7 @@ public class Main extends JFrame
 		});
 		buttonPane.add(shuffleButton);
 		
-		JButton quitButton = new JButton("Exit Room");
+		JButton quitButton = new JButton("   Exit Room   ");
 		buttonPane.add(quitButton);
 		quitButton.setBounds(50,60,80,30);
 		
@@ -133,7 +146,6 @@ public class Main extends JFrame
 	{
 		final LogIn signIn = new LogIn();
 		final Board board = new Board();
-		final Lobby lobby = new Lobby();
 		int gameNum;
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
@@ -146,6 +158,7 @@ public class Main extends JFrame
 				m.setVisible(true);
 			}
 		});
+		buttonPane.setVisible(false);
 		Socket socket = new Socket("localhost",3000);
 		inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		outToServer = new PrintWriter(socket.getOutputStream(), true);
@@ -153,21 +166,30 @@ public class Main extends JFrame
 			Thread.sleep(5);
 		}
 		outToServer.println(signIn.username);
+		String userName = signIn.username;
 		board.remove(signIn);
-		board.add(lobby);//TODO ALL WRONG
+		lobby.welcome(userName);
 		String availableGames = inFromServer.readLine();
-		while(!ingame){
-			System.out.println("waiting");
+		System.out.println("games: " + availableGames);
+		if(availableGames.length() > 1){
+			lobby.populate(availableGames);
 		}
-		board.remove(lobby);
+		lobby.setVisible(true);
+		outerFrame.validate();
+		outerFrame.repaint();
+		while(lobby.gameChosen.length() < 1){
+			Thread.sleep(5);
+		}//TODO also send game name
+		lobby.setVisible(false);
+		buttonPane.setVisible(true);
 		board.init();
-		//TODO remove
-		outToServer.println("0");
+		outToServer.println(lobby.gameNumID.get(lobby.gameChosen));
 		gameStarted = true;
+		ingame = true;
 		while(gameStarted){
 			String newBoard = inFromServer.readLine();
 			if(newBoard.length()<3){//is "No" or "Hi" or something
-				//TODO change this to get rid of bad set
+				btnSet.setBackground(Color.RED);
 				continue;
 			}
 			String newPlayers = inFromServer.readLine();

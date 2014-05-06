@@ -149,14 +149,15 @@ public class Lobby extends JPanel{
 				parsed += String.valueOf(namepair.charAt(i));
 			}else{
 				if(odd){
-					parsed += "-";
+					parsed += " - ";
 					odd = false;
 				}else{
-					parsed += "pts, ";
+					parsed += " pts, ";
 					odd = true;
 				}
 			}
 		}
+		parsed +=" pts";
 		return parsed;
 	}
 	public class EnterListener implements KeyListener{
