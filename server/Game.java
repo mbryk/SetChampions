@@ -6,11 +6,14 @@ public class Game {
 	private ArrayList<PlayerServer> players;
 	private Board board;
 	private int id;
+	private String name;
 	
-	public Game(int id){
+	public Game(int id,String name){
 		this.id = id;
+		this.name = name;
 		players = new ArrayList<PlayerServer>();
 		board = new Board();
+		
 		startGame();
 	}
 	
@@ -63,7 +66,7 @@ public class Game {
 	}
 	
 	public String toString(){
-		String game = id+";";
+		String game = id+";"+name+";";
 		game += board.getCardsLeft()+";";
 		game += getPlayerList();
 		return game;

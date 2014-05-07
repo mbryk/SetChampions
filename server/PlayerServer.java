@@ -28,15 +28,17 @@ public class PlayerServer extends Thread {
 		System.out.println("Got Player Name: "+player.name);
 		boolean play = true;
 		String gameIDstr = null;
+		String gameName = null;
 		
 		while(play){
 			outToPlayer.println(lobby);
 			
 			try{
 				gameIDstr = inFromPlayer.readLine();
+				gameName = inFromPlayer.readLine();
 			} catch(IOException e){};
 			int gameID = Integer.parseInt(gameIDstr);
-			game = lobby.getGame(gameID);
+			game = lobby.getGame(gameID,gameName);
 
 			// Ready to play
 			

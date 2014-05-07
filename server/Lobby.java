@@ -10,12 +10,12 @@ public class Lobby {
 		games = new ArrayList<Game>();
 	}
 	
-	public Game getGame(int index){
+	public Game getGame(int index,String name){
 		Game game = null;
 		if(index<totalGames){
 			game = games.get(index);
 		} else {
-			game = new Game(totalGames++);
+			game = new Game(totalGames++,name);
 			games.add(game);
 		}
 		return game;
