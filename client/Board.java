@@ -204,9 +204,4 @@ public class Board extends JPanel
 		validate();
 		repaint();
 	}
-	public void updatePlayers(String players){
-		//TODO make this do something useful
-		System.out.println("players: "+players);
-	}
-	
 }
