@@ -33,20 +33,27 @@ public class Main extends JFrame
 	private static JPanel buttonPane;
 	private static JButton btnSet;
 	private static Color defaultColor;
-	public Main(final Board board, final LogIn signIn) throws IOException
+	private static JPanel listPane;
+	public Main(final Board board, final LogIn signIn, final PlayerList playerlist) throws IOException
 	{
 		setIconImage(Toolkit.getDefaultToolkit().getImage("SableHead.PNG"));
-		initUI(board, signIn);
+		initUI(board, signIn, playerlist);
 	}
 	
-	private void initUI(final Board board, final LogIn signIn) throws IOException
+	private void initUI(final Board board, final LogIn signIn, final PlayerList playerlist) throws IOException
 	{
 		
 		outerFrame = new JPanel();
-		outerFrame.add(lobby);
+		outerFrame.add(lobby, "name_4838824622983");
 		lobby.setVisible(false);
-		getContentPane().add(outerFrame, BorderLayout.CENTER);
+		
+		listPane = new JPanel();
+		listPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		getContentPane().add(listPane, BorderLayout.EAST);
+		listPane.add(playerlist);
+		listPane.setVisible(false);
 		outerFrame.setLayout(new CardLayout(0, 0));
+		getContentPane().add(outerFrame, BorderLayout.CENTER);
 		outerFrame.add(board, "name_512405034174");
 		JPanel controlPane = new JPanel();
 		getContentPane().add(controlPane, BorderLayout.NORTH);
@@ -92,6 +99,8 @@ public class Main extends JFrame
 		});
 		
 		JPanel displayPane = new JPanel();
+		//TODO delete if we ever get total scores sent to the client
+		displayPane.setVisible(false);
 		controlPane.add(displayPane, BorderLayout.EAST);
 		
 		JLabel lblScore = new JLabel("Score:");
@@ -104,7 +113,7 @@ public class Main extends JFrame
 		displayPane.add(lblPlaceYoutotal);
 		
 		setTitle("World Set Championship");
-		setSize(493,297);
+		setSize(502,303);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addWindowListener(new ExitListener()); //TODO test that works
@@ -146,12 +155,12 @@ public class Main extends JFrame
 	{
 		final LogIn signIn = new LogIn();
 		final Board board = new Board();
-		int gameNum;
+		final PlayerList playerlist = new PlayerList();
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				Main m = null;
 				try {
-					m = new Main(board, signIn);
+					m = new Main(board, signIn, playerlist);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -179,11 +188,13 @@ public class Main extends JFrame
 		outerFrame.repaint();
 		while(lobby.gameChosen.length() < 1){
 			Thread.sleep(5);
-		}//TODO also send game name
+		}
 		lobby.setVisible(false);
 		buttonPane.setVisible(true);
+		listPane.setVisible(true);
 		board.init();
 		outToServer.println(lobby.gameNumID.get(lobby.gameChosen));
+		outToServer.println(lobby.gameChosen);
 		gameStarted = true;
 		ingame = true;
 		while(gameStarted){
@@ -195,7 +206,7 @@ public class Main extends JFrame
 			String newPlayers = inFromServer.readLine();
 			System.out.println("server: "+newPlayers);
 			board.updateBoard(newBoard);
-			board.updatePlayers(newPlayers);
+			playerlist.updatePlayers(newPlayers);
 		}
 	}
 

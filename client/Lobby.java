@@ -119,11 +119,9 @@ public class Lobby extends JPanel{
 			for(i = pos; games.charAt(i) != ';'; ++i){
 			}
 			gameID = games.substring(pos, i);
-			//for(pos = ++i; games.charAt(i) != ';'; ++i){
-			//}
-			//gameName = games.substring(pos, i);
-			//TODO remove when server stores game name
-			gameName = "Game#" + String.valueOf(i);
+			for(pos = ++i; games.charAt(i) != ';'; ++i){
+			}
+			gameName = games.substring(pos, i);
 			gameNumID.put(gameName, gameID);
 			for(pos = ++i; games.charAt(i) != ';'; ++i){
 			}
