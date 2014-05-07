@@ -22,9 +22,11 @@ public class Lobby {
 	}
 
 	public void removeGame(Game game){
-		games.remove(game);
-		totalGames--;
-		updateIds(game.id);
+		if(games.contains(game)){
+			games.remove(game);
+			totalGames--;
+			updateIds(game.id);
+		}
 	}	
 	
 	private void updateIds(int id){

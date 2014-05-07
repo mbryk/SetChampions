@@ -7,25 +7,27 @@ public class Game {
 	private Board board;
 	public int id;
 	private String name;
+	private boolean gameOver;
 	
 	public Game(int id,String name){
 		this.id = id;
 		this.name = name;
 		players = new ArrayList<PlayerServer>();
 		board = new Board();
+		gameOver = false;
 		
 		startGame();
 	}
 	
 	public void addPlayer(PlayerServer pserver){
 		players.add(pserver);
-		alertAll(false);
+		alertAll(0);
 		System.out.println("Game: player added");
 	}
 	
 	public boolean removePlayer(PlayerServer pserver){
 		players.remove(pserver);
-		alertAll(false);
+		if(!gameOver) alertAll(0);
 		return players.isEmpty();
 	}
 	
@@ -35,33 +37,48 @@ public class Game {
 	}
 	
 	// This must be synchronized. This way, only one PlayerServer can submit a move at a time. (I think.)
-	public synchronized void checkMove(PlayerServer pserver, Move move){
-		if(board.checkMove(move)){
-			board.printSets(); //TEMP
-			pserver.player.addPoints(3);
-			alertAll(true);
+	public synchronized boolean checkMove(PlayerServer pserver, Move move){
+		switch(board.checkMove(move)){
+			case 0:
+				pserver.badMove();
+				break;
+			case 1:
+				pserver.player.addPoints(3);
+				alertAll(1);
+				break;
+			case 2:
+				pserver.player.addPoints(3);
+				gameOver = true;
+				alertAll(2);
+				return true;
 		}
-		else{
-			pserver.badMove(); // This can't be in a return, because we want this to be synchronized as well.
-		}
+		return false;
 	}
 	
 	// Only one PlayerServer will get into checkmove at a time, and it will alert all the other players, using the playerserver objects.
 	// Therefore, this method is also technically synchronized.
-	private synchronized void alertAll(boolean sendBoard){
+	// 0 = Just send player list. 1 = Send Board and Player List. 2 = Send over and Player List.
+	private synchronized void alertAll(int sendBoard){
 		String boardString = null;
-		if(sendBoard) boardString = board.toString();
-
+		if(sendBoard==1) boardString = board.toString();
 		String playerList = getPlayerList();
+		String winner = getWinner();
 		for(PlayerServer pserver : players){
-			// This will be run on this main thread. The other thread will continue to be 
-			if(sendBoard) pserver.sendInfo(boardString,playerList);
-			else pserver.sendList(playerList);
+			// This will be run on this main thread. The other thread will continue to be
+			switch(sendBoard){
+				case 0: pserver.sendList(playerList); break;
+				case 1: pserver.sendInfo(boardString,playerList); break;
+				case 2: pserver.sendWinner(winner, playerList); break;
+			}
 		}
 	}
 	
 	public Board getBoard(){
 		return board;
+	}
+	
+	public String getWinner(){
+		return players.get(0).player.name;
 	}
 
 	public String getPlayerList(){

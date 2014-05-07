@@ -23,13 +23,12 @@ public class Board extends JPanel
 		System.out.println(this);
 	}
 	
-	public boolean checkMove(Move move){
+	public int checkMove(Move move){ // 0 = Bad Move, 1 = Good Move, 2 = Game Over!
 		if(bu.getSets().contains(move)){
-			bu.makeMove(move);
-			return true;
+			boolean gameOver = bu.makeMove(move);
+			return gameOver?2:1;
 		}
-		
-		return false;
+		return 0;
 	}
 	
 	// Check the printBoard method to see how positions are designated

@@ -65,19 +65,21 @@ public class BoardUtilities
 		return sets;
 	}
 	
-	public void makeMove(Move move){
+	public boolean makeMove(Move move){ // Return Game Over 
 		for(int i=0; i<numCardsOnBoard; i++)
 			if(gameBoard[i].equals(move.cards[0]) || gameBoard[i].equals(move.cards[1]) || gameBoard[i].equals(move.cards[2])){
 				gameBoard[i] = deck[--numCardsDeck];		//Replace the card on board with card in deck
 				deck[numCardsDeck] = null;				//Remove card replaced in deck
 			}
 		
-		if (getSets().isEmpty()){
+		while (getSets().isEmpty()){
+			if(numCardsDeck==0) return true; // Game Over!
 			for(int i=0; i<3; i++){
 				gameBoard[numCardsOnBoard++] = deck[numCardsDeck--];
 				deck[numCardsDeck] = null;
 			}
 		}
+		return false;
 	}
 	
 	public Card[] getBoard(){

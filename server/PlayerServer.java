@@ -31,11 +31,11 @@ public class PlayerServer extends Thread {
 		String gameName = null;
 		
 		while(play){
-			outToPlayer.println(lobby);
+			outToPlayer.println("lobby: "+lobby);
 			
 			try{
 				while((gameIDstr=inFromPlayer.readLine()).equals("refresh"))
-					outToPlayer.println(lobby);
+					outToPlayer.println("lobby: "+lobby);
 				gameName = inFromPlayer.readLine();
 			} catch(IOException e){};
 			
@@ -58,7 +58,9 @@ public class PlayerServer extends Thread {
 				if(type==1){ // move
 					Move move = listenToPlayer(); // Wait for move
 					System.out.println("Server: Received Move");
-					game.checkMove(this,move);
+					if(game.checkMove(this,move)){
+						lobby.removeGame(game);
+					}
 				} else{
 					if(game.removePlayer(this)) // Game empty
 						lobby.removeGame(game);
@@ -113,6 +115,11 @@ public class PlayerServer extends Thread {
 	public void sendList(String playerList){ 
 		outToPlayer.println("player: "+playerList);
 	}
+	
+	public void sendWinner(String winner, String playerList){ 
+		outToPlayer.println("over: "+winner);
+		outToPlayer.println("player: "+playerList);
+	}	
 	
 	public void badMove(){
 		outToPlayer.println("No");
