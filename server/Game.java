@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Game {
 	private ArrayList<PlayerServer> players;
 	private Board board;
-	private int id;
+	public int id;
 	private String name;
 	
 	public Game(int id,String name){
@@ -19,11 +19,14 @@ public class Game {
 	
 	public void addPlayer(PlayerServer pserver){
 		players.add(pserver);
+		alertAll(false);
 		System.out.println("Game: player added");
 	}
 	
-	public void removePlayer(PlayerServer pserver){
+	public boolean removePlayer(PlayerServer pserver){
 		players.remove(pserver);
+		alertAll(false);
+		return players.isEmpty();
 	}
 	
 	public void startGame(){
@@ -36,7 +39,7 @@ public class Game {
 		if(board.checkMove(move)){
 			board.printSets(); //TEMP
 			pserver.player.addPoints(3);
-			alertAll();
+			alertAll(true);
 		}
 		else{
 			pserver.badMove(); // This can't be in a return, because we want this to be synchronized as well.
@@ -45,18 +48,22 @@ public class Game {
 	
 	// Only one PlayerServer will get into checkmove at a time, and it will alert all the other players, using the playerserver objects.
 	// Therefore, this method is also technically synchronized.
-	private void alertAll(){
-		String boardString = board.toString();
+	private synchronized void alertAll(boolean sendBoard){
+		String boardString = null;
+		if(sendBoard) boardString = board.toString();
+
 		String playerList = getPlayerList();
 		for(PlayerServer pserver : players){
 			// This will be run on this main thread. The other thread will continue to be 
-			pserver.sendInfo(boardString,playerList);
+			if(sendBoard) pserver.sendInfo(boardString,playerList);
+			else pserver.sendList(playerList);
 		}
 	}
 	
 	public Board getBoard(){
 		return board;
 	}
+
 	public String getPlayerList(){
 		String playerList = "";
 		for(PlayerServer pserver : players){

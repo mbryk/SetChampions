@@ -20,6 +20,18 @@ public class Lobby {
 		}
 		return game;
 	}
+
+	public void removeGame(Game game){
+		games.remove(game);
+		totalGames--;
+		updateIds(game.id);
+	}	
+	
+	private void updateIds(int id){
+		for (Game game : games.subList(id,totalGames)){
+			game.id--;
+		}
+	}
 	
 	public String toString(){
 		String lobby = "";

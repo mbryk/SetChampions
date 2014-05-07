@@ -34,17 +34,19 @@ public class PlayerServer extends Thread {
 			outToPlayer.println(lobby);
 			
 			try{
-				gameIDstr = inFromPlayer.readLine();
+				while((gameIDstr=inFromPlayer.readLine()).equals("refresh"))
+					outToPlayer.println(lobby);
 				gameName = inFromPlayer.readLine();
 			} catch(IOException e){};
+			
 			int gameID = Integer.parseInt(gameIDstr);
 			game = lobby.getGame(gameID,gameName);
 
 			// Ready to play
 			
-			Board board = game.getBoard();
+			//Board board = game.getBoard();
 			//board.setBoard("201221001222200020110011012121020021021001202202");
-			sendInfo(board.toString(),game.getPlayerList());
+			outToPlayer.println("board: "+game.getBoard().toString());
 			System.out.println("Sent Game Info");
 			game.addPlayer(this);
 
@@ -58,7 +60,9 @@ public class PlayerServer extends Thread {
 					System.out.println("Server: Received Move");
 					game.checkMove(this,move);
 				} else{
-					game.removePlayer(this);
+					if(game.removePlayer(this)) // Game empty
+						lobby.removeGame(game);
+
 					//type 2 = quit game
 					if(type==3){ // exit
 						outToPlayer.println("Goodbye");
@@ -67,6 +71,7 @@ public class PlayerServer extends Thread {
 					break;
 				}
 			}
+			System.out.println("PlayerServer: Player Left :(");
 		}
     }
 	
@@ -101,8 +106,12 @@ public class PlayerServer extends Thread {
 	// This doesn't need to be synchronized. It will be called by this thread ONCE.
 	// After game.addPlayer(), it will only be called by the alertAll function which itself is synchronized.
 	public void sendInfo(String board, String playerList){ 
-		outToPlayer.println(board);
-		outToPlayer.println(playerList);
+		outToPlayer.println("board: "+board);
+		outToPlayer.println("player: "+playerList);
+	}
+
+	public void sendList(String playerList){ 
+		outToPlayer.println("player: "+playerList);
 	}
 	
 	public void badMove(){
