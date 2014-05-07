@@ -25,6 +25,7 @@ public class Lobby extends JPanel{
 	String gameChosen = "";
 	int numberOfGames = 0;
 	JLabel welcomeLabel;
+	private String input = "!";
 	public Lobby() {
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -107,34 +108,41 @@ public class Lobby extends JPanel{
 	 * @param availableGames list of games
 	 */
 	public void populate(String games) {
-		int pos = 0;
-		int i;
-		gameNumID.clear();
-		ArrayList<String> listData = new ArrayList<String>();
-		for(numberOfGames = 0; pos < games.length(); ++numberOfGames){
-			String gameID;
-			String gameName;
-			String cardsLeft;
-			String playerName;
-			for(i = pos; games.charAt(i) != ';'; ++i){
+		if(!games.equals(input)){
+			System.out.println("repopulating");
+			System.out.println(games);
+			System.out.println(input);
+			input = games;
+			int pos = 0;
+			int i;
+			gameNumID.clear();
+			
+			ArrayList<String> listData = new ArrayList<String>();
+			for(numberOfGames = 0; pos < games.length(); ++numberOfGames){
+				String gameID;
+				String gameName;
+				String cardsLeft;
+				String playerName;
+				for(i = pos; games.charAt(i) != ';'; ++i){
+				}
+				gameID = games.substring(pos, i);
+				for(pos = ++i; games.charAt(i) != ';'; ++i){
+				}
+				gameName = games.substring(pos, i);
+				gameNumID.put(gameName, gameID);
+				for(pos = ++i; games.charAt(i) != ';'; ++i){
+				}
+				cardsLeft = games.substring(pos, i);
+				for(pos = ++i; games.charAt(i) != ';' || games.charAt(i+1) != ';' || (i+2 < games.length() && games.charAt(i+2) != ';'); ++i){
+				}
+				playerName = games.substring(pos, i);
+				pos = i + 3;
+				listData.add(gameName + "\t " + cardsLeft + " cards left " + "      " + parseName(playerName));
 			}
-			gameID = games.substring(pos, i);
-			for(pos = ++i; games.charAt(i) != ';'; ++i){
-			}
-			gameName = games.substring(pos, i);
-			gameNumID.put(gameName, gameID);
-			for(pos = ++i; games.charAt(i) != ';'; ++i){
-			}
-			cardsLeft = games.substring(pos, i);
-			for(pos = ++i; games.charAt(i) != ';' || games.charAt(i+1) != ';' || games.charAt(i+2) != ';'; ++i){
-			}
-			playerName = games.substring(pos, i);
-			pos = i + 3;
-			listData.add(gameName + "\t " + cardsLeft + " cards left " + "      " + parseName(playerName));
+			String [] myData = new String[listData.size()];
+			listData.toArray(myData);
+			list.setListData(myData);
 		}
-		String [] myData = new String[listData.size()];
-		listData.toArray(myData);
-		list.setListData(myData);
 	}
 	/***
 	 * Make the string look nice - separate points from other players

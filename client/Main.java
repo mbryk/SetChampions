@@ -46,7 +46,6 @@ public class Main extends JFrame
 		outerFrame = new JPanel();
 		outerFrame.add(lobby, "name_4838824622983");
 		lobby.setVisible(false);
-		
 		listPane = new JPanel();
 		listPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		getContentPane().add(listPane, BorderLayout.EAST);
@@ -85,32 +84,6 @@ public class Main extends JFrame
 			}
 		});
 		buttonPane.add(shuffleButton);
-		/*
-		JButton quitButton = new JButton("   Exit Room   ");
-		buttonPane.add(quitButton);
-		quitButton.setBounds(50,60,80,30);
-		
-		quitButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent event)
-			{
-				outToServer.println("2");
-			}
-		});
-		*/
-		JPanel displayPane = new JPanel();
-		//TODO delete if we ever get total scores sent to the client
-		displayPane.setVisible(false);
-		controlPane.add(displayPane, BorderLayout.EAST);
-		
-		JLabel lblScore = new JLabel("Score:");
-		displayPane.add(lblScore);
-		
-		JSeparator separator = new JSeparator();
-		displayPane.add(separator);
-		
-		JLabel lblPlaceYoutotal = new JLabel("Place: you/total");
-		displayPane.add(lblPlaceYoutotal);
 		
 		setTitle("World Set Championship");
 		setSize(502,303);
@@ -187,6 +160,8 @@ public class Main extends JFrame
 		outerFrame.validate();
 		outerFrame.repaint();
 		while(lobby.gameChosen.length() < 1){
+			outToServer.println("refresh");
+			lobby.populate(inFromServer.readLine());
 			Thread.sleep(5);
 		}
 		lobby.setVisible(false);
