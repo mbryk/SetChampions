@@ -85,7 +85,7 @@ public class Main extends JFrame
 			}
 		});
 		buttonPane.add(shuffleButton);
-		
+		/*
 		JButton quitButton = new JButton("   Exit Room   ");
 		buttonPane.add(quitButton);
 		quitButton.setBounds(50,60,80,30);
@@ -97,7 +97,7 @@ public class Main extends JFrame
 				outToServer.println("2");
 			}
 		});
-		
+		*/
 		JPanel displayPane = new JPanel();
 		//TODO delete if we ever get total scores sent to the client
 		displayPane.setVisible(false);
@@ -198,15 +198,18 @@ public class Main extends JFrame
 		gameStarted = true;
 		ingame = true;
 		while(gameStarted){
-			String newBoard = inFromServer.readLine();
-			if(newBoard.length()<3){//is "No" or "Hi" or something
+			String in = inFromServer.readLine();
+			if(in.startsWith("No")){
 				btnSet.setBackground(Color.RED);
 				continue;
 			}
-			String newPlayers = inFromServer.readLine();
-			System.out.println("server: "+newPlayers);
-			board.updateBoard(newBoard);
-			playerlist.updatePlayers(newPlayers);
+			if(in.startsWith("board: ")){
+				System.out.println(in);
+				System.out.println(in.substring(7));
+				board.updateBoard(in.substring(7));
+			}
+			if(in.startsWith("player: "))
+			playerlist.updatePlayers(in.substring(7));
 		}
 	}
 
