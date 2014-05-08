@@ -34,6 +34,8 @@ public class Main extends JFrame
 	private static JButton btnSet;
 	private static Color defaultColor;
 	private static JPanel listPane;
+	private JButton btnReturnToLobby;
+	private static JLabel gameOver;
 	public Main(final Board board, final LogIn signIn, final PlayerList playerlist) throws IOException
 	{
 		setIconImage(Toolkit.getDefaultToolkit().getImage("SableHead.PNG"));
@@ -84,6 +86,18 @@ public class Main extends JFrame
 			}
 		});
 		buttonPane.add(shuffleButton);
+		
+		btnReturnToLobby = new JButton("Return to Lobby");
+		btnReturnToLobby.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				outToServer.println("2");
+			}
+		});
+		buttonPane.add(btnReturnToLobby);
+		
+		gameOver = new JLabel("Game Over");
+		gameOver.setVisible(false);
+		controlPane.add(gameOver, BorderLayout.EAST);
 		
 		setTitle("World Set Championship");
 		setSize(502,303);
@@ -153,38 +167,62 @@ public class Main extends JFrame
 		lobby.welcome(userName);
 		String availableGames = inFromServer.readLine();
 		System.out.println("games: " + availableGames);
-		if(availableGames.length() > 1){
-			lobby.populate(availableGames);
+		if(availableGames.substring(7).length() > 1){
+			System.out.println("populating lobby");
+			lobby.populate(availableGames.substring(7));
 		}
+		System.out.println("about to set lobby visible");
 		lobby.setVisible(true);
+		//TODO
+		System.out.println("setting lobby visible");
 		outerFrame.validate();
 		outerFrame.repaint();
-		while(lobby.gameChosen.length() < 1){
-			outToServer.println("refresh");
-			lobby.populate(inFromServer.readLine());
-			Thread.sleep(5);
-		}
-		lobby.setVisible(false);
-		buttonPane.setVisible(true);
-		listPane.setVisible(true);
-		board.init();
-		outToServer.println(lobby.gameNumID.get(lobby.gameChosen));
-		outToServer.println(lobby.gameChosen);
-		gameStarted = true;
-		ingame = true;
-		while(gameStarted){
-			String in = inFromServer.readLine();
-			if(in.startsWith("No")){
-				btnSet.setBackground(Color.RED);
-				continue;
+		while(true){//very hackey, but it should work
+			while(lobby.gameChosen.length() < 1){
+				outToServer.println("refresh");
+				lobby.populate(inFromServer.readLine().substring(7));
+				Thread.sleep(5);
 			}
-			if(in.startsWith("board: ")){
-				System.out.println(in);
-				System.out.println(in.substring(7));
-				board.updateBoard(in.substring(7));
+			lobby.setVisible(false);
+			board.setVisible(true);
+			buttonPane.setVisible(true);
+			listPane.setVisible(true);
+			board.init();
+			outToServer.println(lobby.gameNumID.get(lobby.gameChosen));
+			outToServer.println(lobby.gameChosen);
+			gameStarted = true;
+			ingame = true;
+			while(gameStarted){
+				String in = inFromServer.readLine();
+				if(in.startsWith("No")){
+					btnSet.setBackground(Color.RED);
+					continue;
+				}
+				if(in.startsWith("board: ")){
+					System.out.println(in);
+					System.out.println(in.substring(7));
+					board.updateBoard(in.substring(7));
+				}
+				if(in.startsWith("player: ")){
+					playerlist.updatePlayers(in.substring(8));
+				}
+				if(in.startsWith("lobby: ")){
+					gameStarted = false;
+					ingame = false;
+					//board.removeAll();
+					board.setVisible(false);
+					listPane.setVisible(false);
+					lobby.setVisible(true);
+					lobby.gameChosen = "";
+					buttonPane.setVisible(false);
+					gameOver.setVisible(false);
+					break;//Why do I need this???
+				}
+				if(in.startsWith("over: ")){
+					gameOver.setVisible(true);
+					Thread.sleep(6000);
+				}
 			}
-			if(in.startsWith("player: "))
-			playerlist.updatePlayers(in.substring(7));
 		}
 	}
 

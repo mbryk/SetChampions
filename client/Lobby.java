@@ -108,6 +108,8 @@ public class Lobby extends JPanel{
 	 * @param availableGames list of games
 	 */
 	public void populate(String games) {
+		//TODO
+		System.out.println("lobby: games = " + games);
 		if(!games.equals(input)){
 			System.out.println("repopulating");
 			System.out.println(games);
