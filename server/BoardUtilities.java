@@ -66,26 +66,26 @@ public class BoardUtilities
 	}
 	
 	public boolean makeMove(Move move){ // Return Game Over 
-		int removedFromBoard = 0;
 		for(int i=0; i<numCardsOnBoard; i++)
 			if(gameBoard[i].equals(move.cards[0]) || gameBoard[i].equals(move.cards[1]) || gameBoard[i].equals(move.cards[2])){
 				if(numCardsDeck > 0) {
 					gameBoard[i] = deck[--numCardsDeck];		//Replace the card on board with card in deck
 					deck[numCardsDeck] = null;				//Remove card replaced in deck
 				} else {
-					gameBoard[i] = null;
-					removedFromBoard--;
+					gameBoard[i] = gameBoard[--numCardsOnBoard];
+					gameBoard[numCardsOnBoard] = null;
 				}
 			}
-		
-		numCardsOnBoard -= removedFromBoard;
 		
 		while (getSets().isEmpty()){
 			if(numCardsDeck==0) return true; // Game Over!
 			for(int i=0; i<3; i++){
-				gameBoard[numCardsOnBoard++] = deck[numCardsDeck--];
+				gameBoard[numCardsOnBoard] = deck[numCardsDeck-1];
+				numCardsOnBoard++;
+				numCardsDeck--;
 				deck[numCardsDeck] = null;
 			}
+			System.out.println("No set on board! Cards added.");
 		}
 		return false;
 	}
