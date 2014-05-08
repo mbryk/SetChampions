@@ -95,7 +95,7 @@ public class Main extends JFrame
 		});
 		buttonPane.add(btnReturnToLobby);
 		
-		gameOver = new JLabel("Game Over");
+		gameOver = new JLabel("Game Over ");
 		gameOver.setVisible(false);
 		controlPane.add(gameOver, BorderLayout.EAST);
 		

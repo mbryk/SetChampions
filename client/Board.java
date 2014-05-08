@@ -150,7 +150,7 @@ public class Board extends JPanel
 				}
 			}
 			while(board.length() > 4*cardsInPlay.size()){//we need to add cards to the board - either 3, 6, or 9 of them
-				int pos = 4*cardsInPlay.size() - 1;
+				int pos = 4*cardsInPlay.size();//TODO is this the bug? it shouldn't be -1?
 				CardGUI card = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
 				ClickListener clicked = new ClickListener(card);
 				card.addMouseListener(clicked);
@@ -160,7 +160,7 @@ public class Board extends JPanel
 				card.setNewCardBorder();
 			}
 			if(board.length() < 4*cardsInPlay.size()){//we need to remove the selected cards from the board
-				boolean cardfound;
+				boolean cardfound; //TODO is this the bug? should be -1
 				for(int i = 0; i < cardsInPlay.size(); ++i){
 					cardfound = false;
 					for(int j = 0; j < cardsInPlay.size(); j = j + 4){
