@@ -180,7 +180,7 @@ public class CardGUI extends JPanel implements ComponentListener
 	}
 	public boolean equals(Object mycard){
 		CardGUI card = (CardGUI) mycard;
-		if(card.color == color && card.number == number && card.shape == shape && card.filled == filled){
+		if(card!=null&&card.color == color && card.number == number && card.shape == shape && card.filled == filled){
 			return true;
 		}else{
 			return false;
