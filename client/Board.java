@@ -104,6 +104,7 @@ public class Board extends JPanel
 		}
 	}
 	public void updateBoard(String board) throws IOException{
+		int originalSize = cardsToPos.size();
 		//debugging code
 		if(cardsToPos.size() != posToCards.size()){
 			System.out.println("Error - cardsToPos.size() != posToCards.size()");
@@ -184,7 +185,7 @@ public class Board extends JPanel
 					}
 				}
 				if(removed<3){
-					int endPos = board.length()/4 + 3;
+					int endPos = board.length()/4 + 2;
 					for(int j = removed; j<3; j++){
 						while(!posToCards.containsKey(endPos)) endPos--;
 						tmp = posToCards.get(endPos);
@@ -193,7 +194,56 @@ public class Board extends JPanel
 						posToCards.remove(endPos);
 					}
 				}
-			}else{
+			} else if(originalSize>12) {
+				int removed = 0;
+				for(int i = 0; i < originalSize-3; ++i){//first change the moved up cards
+					System.out.println("debug: there are " + cardsToPos.size() + " cards on the board");
+					
+					//debugging code
+					if(cardsToPos.size() != posToCards.size()){
+						System.out.println("Error - cardsToPos.size() = " + cardsToPos.size() + "and posToCards.size() = " + posToCards.size());
+					}
+					
+					CardGUI test = new CardGUI(Character.getNumericValue(board.charAt(4*i)), Character.getNumericValue(board.charAt(4*i+1)), Character.getNumericValue(board.charAt(4*i+2)), Character.getNumericValue(board.charAt(4*i+3)));
+					if(cardsToPos.get(test) != i){//this card should be removed
+							tmp = posToCards.get(i);
+							remove(tmp);
+							posToCards.remove(i);
+							posToCards.remove(cardsToPos.get(test));
+							
+							cardsToPos.remove(tmp);
+							cardsToPos.remove(test);
+							
+							cardsToPos.put(test, i);
+							posToCards.put(i, test);
+							removed++;
+					}
+				} 
+				if(removed<3){
+					int endPos = originalSize-1;
+					for(int j = removed; j<3; j++){
+						while(!posToCards.containsKey(endPos)) endPos--;
+						tmp = posToCards.get(endPos);
+						remove(tmp);
+						cardsToPos.remove(tmp);
+						posToCards.remove(endPos);
+					}
+				}
+				System.out.println(removed+" cards moved up!"); // Now you have three empty spots for new cards
+				// Now, add the three new cards.
+				for(int i=originalSize-3;i<originalSize;i++){
+					int pos = i*4;
+					CardGUI card = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
+					ClickListener clicked = new ClickListener(card);
+					card.addMouseListener(clicked);
+					cardsToPos.put(card, i);
+					posToCards.put(i, card);
+					newCards.add(card);
+					add(card);
+					card.setNewCardBorder();
+				}
+			}
+			else{ // There were 12 cards. Which got replaced
 				for(int i = 0; i < cardsToPos.size(); ++i){//change only the new cards
 					System.out.println("debug: there are " + cardsToPos.size() + " cards on the board");
 					

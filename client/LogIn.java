@@ -30,13 +30,15 @@ public class LogIn extends JPanel {
 	private JPanel panel;
 	private JCheckBox registerBox;
 	private JLabel errorLabel;
+	private JLabel lblEnterEmail;
+	private JTextField textField_1;
 	public LogIn() {
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{57, 78, 239, 24, 0};
-		gridBagLayout.rowHeights = new int[]{30, 0, 0, 51, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowHeights = new int[]{30, 0, 0, 51, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 
@@ -84,13 +86,30 @@ public class LogIn extends JPanel {
 			}
 		});
 		
+		lblEnterEmail = new JLabel("Enter Email:");
+		GridBagConstraints gbc_lblEnterEmail = new GridBagConstraints();
+		gbc_lblEnterEmail.anchor = GridBagConstraints.EAST;
+		gbc_lblEnterEmail.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEnterEmail.gridx = 1;
+		gbc_lblEnterEmail.gridy = 5;
+		add(lblEnterEmail, gbc_lblEnterEmail);
+		
+		textField_1 = new JTextField();
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.anchor = GridBagConstraints.WEST;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.gridx = 2;
+		gbc_textField_1.gridy = 5;
+		add(textField_1, gbc_textField_1);
+		textField_1.setColumns(10);
+		
 		panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.EAST;
 		gbc_panel.insets = new Insets(0, 0, 5, 5);
 		gbc_panel.fill = GridBagConstraints.VERTICAL;
 		gbc_panel.gridx = 1;
-		gbc_panel.gridy = 4;
+		gbc_panel.gridy = 6;
 		add(panel, gbc_panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -100,14 +119,14 @@ public class LogIn extends JPanel {
 		gbc_button.anchor = GridBagConstraints.WEST;
 		gbc_button.insets = new Insets(0, 0, 5, 5);
 		gbc_button.gridx = 2;
-		gbc_button.gridy = 4;
+		gbc_button.gridy = 6;
 		add(button, gbc_button);
 		
 		errorLabel = new JLabel("New label");
 		GridBagConstraints gbc_errorLabel = new GridBagConstraints();
 		gbc_errorLabel.insets = new Insets(0, 0, 0, 5);
 		gbc_errorLabel.gridx = 2;
-		gbc_errorLabel.gridy = 5;
+		gbc_errorLabel.gridy = 7;
 		add(errorLabel, gbc_errorLabel);
 		errorLabel.setVisible(false);
 	}
