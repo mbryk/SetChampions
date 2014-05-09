@@ -18,7 +18,7 @@ public class BoardUtilities
 	public BoardUtilities(Card[] gb, int nc){
 		gameBoard = gb;
 		numCardsOnBoard = nc;
-		numCardsDeck = 81;
+		numCardsDeck = 81-nc;
 		deck = new Card[81];
 		generateDeck();
 		for(int i=0; i<nc; i++)
@@ -69,18 +69,18 @@ public class BoardUtilities
 		
 		for(int i=0; i<numCardsOnBoard; i++)
 			if(gameBoard[i].equals(move.cards[0]) || gameBoard[i].equals(move.cards[1]) || gameBoard[i].equals(move.cards[2])){
-				if((numCardsOnBoard > 12) || (numCardsDeck <= 0)) {
+				if((numCardsOnBoard > 12) || (numCardsDeck <= 0)) { //move up code
 					gameBoard[i] = gameBoard[numCardsOnBoard-1];
 					numCardsOnBoard--;
 					i--;
 					gameBoard[numCardsOnBoard] = null;
-				} else {
+				} else { //New Cards In code
 					gameBoard[i] = deck[--numCardsDeck];		//Replace the card on board with card in deck
 					deck[numCardsDeck] = null;				//Remove card replaced in deck
 				}
 			}
 		
-		while (getSets().isEmpty()){
+		while (getSets().isEmpty()){ // possibly append code
 			if(numCardsDeck==0) return true; // Game Over!
 			for(int j=0; j<3; j++){
 				gameBoard[numCardsOnBoard] = deck[numCardsDeck-1];
@@ -88,9 +88,7 @@ public class BoardUtilities
 				numCardsDeck--;
 				deck[numCardsDeck] = null;
 			}
-			System.out.println("No set on board! Cards added.");
 		}
-		System.out.println("NumCardsOnBoard = " + numCardsOnBoard);
 		return false;
 	}
 	

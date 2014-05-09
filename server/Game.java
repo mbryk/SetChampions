@@ -1,6 +1,8 @@
 package server;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Game {
 	private ArrayList<PlayerServer> players;
@@ -27,8 +29,9 @@ public class Game {
 	
 	public boolean removePlayer(PlayerServer pserver){
 		players.remove(pserver);
-		if(!gameOver) alertAll(0);
-		return players.isEmpty();
+		boolean empty = players.isEmpty();
+		if((!gameOver) && (!empty)) alertAll(0);
+		return empty;
 	}
 	
 	public void startGame(){
@@ -44,15 +47,27 @@ public class Game {
 				break;
 			case 1:
 				pserver.player.addPoints(3);
+				sortList();
 				alertAll(1);
 				break;
 			case 2:
 				pserver.player.addPoints(3);
+				sortList();
 				gameOver = true;
 				alertAll(2);
 				return true;
 		}
 		return false;
+	}
+	
+	private void sortList(){
+		Collections.sort(players, new Comparator<PlayerServer>() {
+			@Override
+			public int compare(PlayerServer o1, PlayerServer o2) {
+				return o2.player.getPoints() - o1.player.getPoints();
+	
+			}
+		});
 	}
 	
 	// Only one PlayerServer will get into checkmove at a time, and it will alert all the other players, using the playerserver objects.
