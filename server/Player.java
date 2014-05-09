@@ -15,6 +15,9 @@ public class Player {
 	public void addPoints(int newPoints){
 		points += newPoints;
 	}
+	public void resetPoints(){
+		points = 0;
+	}
 	public String getName(){
 		return name;
 	}
