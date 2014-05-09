@@ -61,6 +61,7 @@ public class PlayerServer extends Thread {
 						lobby.removeGame(game);
 					}
 				} else{
+					player.resetPoints();
 					if(game.removePlayer(this)) // Game empty
 						lobby.removeGame(game);
 
