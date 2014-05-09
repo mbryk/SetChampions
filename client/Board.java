@@ -98,6 +98,7 @@ public class Board extends JPanel
 	}
 	public String getSelected(){
 		if(card1 != null && card2 != null && card3 != null){
+			System.out.println("New Move:"+card1+" "+card2+" "+card3);
 			return String.valueOf(cardsToPos.get(card1)) +"\n" + String.valueOf(cardsToPos.get(card2)) + "\n" + String.valueOf(cardsToPos.get(card3));
 		}else{
 			return null;
@@ -246,9 +247,11 @@ public class Board extends JPanel
 					}
 					
 					CardGUI test = new CardGUI(Character.getNumericValue(board.charAt(4*i)), Character.getNumericValue(board.charAt(4*i+1)), Character.getNumericValue(board.charAt(4*i+2)), Character.getNumericValue(board.charAt(4*i+3)));
-					
+
 					if(!cardsToPos.containsKey(test)){//this is a new card
+						System.out.println("New Card:"+test);
 						CardGUI oldCard = posToCards.get(i);
+						System.out.println("Old Card:"+oldCard+" at "+i);
 						//check if this is card1, card2, card3
 						//check if card1,2,or 3 was removed
 						if(oldCard == card3){

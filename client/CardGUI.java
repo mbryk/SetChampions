@@ -190,4 +190,13 @@ public class CardGUI extends JPanel implements ComponentListener
 		//System.out.println("hascode called");
 		return color + 10*number + 100*shape + 1000*filled;
 	}
+	public String toString(){
+		String str = "";
+		
+		switch(shape) { case 0: str+=" diamond";break; case 1: str+=" wavy";break; case 2: str+=" oval";break;}
+		switch(color) { case 0: str+=" red ";break; case 1: str+=" green ";break; case 2: str+=" pink ";break;}
+		switch(filled) { case 0: str+="clear";break; case 1: str+="shaded";break; case 2: str+="solid";break;}
+		str+=number;
+		return str;
+	}
 }
