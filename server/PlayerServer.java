@@ -44,7 +44,7 @@ public class PlayerServer extends Thread {
 
 			// Ready to play
 		
-			game.getBoard().setBoard("012222012202021012112002020000211112011022002001");
+			//game.getBoard().setBoard("012222012202021012112002020000211112011022002001");
 			outToPlayer.println("board: "+game.getBoard().toString());
 			System.out.println("Sent Game Info");
 			game.addPlayer(this);
