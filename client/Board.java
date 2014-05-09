@@ -158,7 +158,7 @@ public class Board extends JPanel
 					}
 					//reset card1, card2, card3
 					if(tmp == card3){
-						card3.resetBorder();
+						//card3.resetBorder();
 						card3 = null;
 					}
 					if(tmp == card2){
@@ -166,7 +166,7 @@ public class Board extends JPanel
 							card2 = card3;
 							card3 = null;
 						}else{
-							card2.resetBorder();
+							//card2.resetBorder();
 							card2 = null;
 						}
 					}
@@ -179,7 +179,7 @@ public class Board extends JPanel
 								card1 = card2;
 								card2 = null;
 						}else{
-							card1.resetBorder();
+							//card1.resetBorder();
 							card1 = null;
 						}
 					}
