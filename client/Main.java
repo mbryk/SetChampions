@@ -36,6 +36,7 @@ public class Main extends JFrame
 	private static JPanel listPane;
 	private JButton btnReturnToLobby;
 	private static JLabel gameOver;
+	private JButton btnFoundABug;
 	public Main(final Board board, final LogIn signIn, final PlayerList playerlist) throws IOException
 	{
 		setIconImage(Toolkit.getDefaultToolkit().getImage("SableHead.PNG"));
@@ -94,6 +95,16 @@ public class Main extends JFrame
 			}
 		});
 		buttonPane.add(btnReturnToLobby);
+		
+		btnFoundABug = new JButton("Found a bug!");
+		buttonPane.add(btnFoundABug);
+		btnFoundABug.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnFoundABug.setText("It's a feature");
+				btnFoundABug.setEnabled(false);
+				btnFoundABug.setBackground(Color.GREEN);
+			}
+		});
 		
 		gameOver = new JLabel("Game Over ");
 		gameOver.setVisible(false);
