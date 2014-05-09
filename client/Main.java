@@ -155,7 +155,7 @@ public class Main extends JFrame
 			}
 		});
 		buttonPane.setVisible(false);
-		Socket socket = new Socket("localhost",3000);
+		Socket socket = new Socket("199.98.20.120",3000);
 		inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		outToServer = new PrintWriter(socket.getOutputStream(), true);
 		while(!signIn.attemptSignIn){
