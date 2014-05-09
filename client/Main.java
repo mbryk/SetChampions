@@ -96,11 +96,11 @@ public class Main extends JFrame
 		});
 		buttonPane.add(btnReturnToLobby);
 		
-		btnFoundABug = new JButton("Found a bug!");
+		btnFoundABug = new JButton("Found a bug?");
 		buttonPane.add(btnFoundABug);
 		btnFoundABug.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				btnFoundABug.setText("It's a feature");
+				btnFoundABug.setText("It's a feature!");
 				btnFoundABug.setEnabled(false);
 				btnFoundABug.setBackground(Color.GREEN);
 			}

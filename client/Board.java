@@ -136,13 +136,24 @@ public class Board extends JPanel
 				add(card);
 				card.setNewCardBorder();
 			}
+			CardGUI tmp;
 			if(board.length() < 4*cardsToPos.size()){//we need to remove the selected cards from the board
+				int removed = 0;
 				for(int pos = 0; pos < board.length(); pos = pos+4){
+					
 					CardGUI test = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
 					if(cardsToPos.get(test) != pos/4){//this card should be removed
-						remove(posToCards.get(pos/4));//remove from board
-						cardsToPos.remove(test);
+						tmp = posToCards.get(pos/4);
+						remove(tmp);
 						posToCards.remove(pos/4);
+						posToCards.remove(cardsToPos.get(test));
+						
+						cardsToPos.remove(tmp);
+						cardsToPos.remove(test);
+						
+						cardsToPos.put(test, pos/4);
+						posToCards.put(pos/4, test);
+						removed++;
 					}
 					//reset card1, card2, card3
 					if(test == card3){
@@ -170,6 +181,14 @@ public class Board extends JPanel
 							card1.resetBorder();
 							card1 = null;
 						}
+					}
+				}
+				if(removed<3){
+					for(int j = removed; j<3; j++){
+						tmp = posToCards.get(posToCards.size()-1);
+						posToCards.remove(cardsToPos.size()-1);
+						cardsToPos.remove(tmp);
+						remove(tmp);
 					}
 				}
 			}else{
