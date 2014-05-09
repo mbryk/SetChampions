@@ -135,6 +135,9 @@ public class Board extends JPanel
 					CardGUI test = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
 					if(cardsToPos.get(test) != pos/4){//this card should be removed
 						tmp = posToCards.get(pos/4);
+						System.out.println("Tmp is "+tmp+" at index "+pos/4);
+						System.out.println("Test is "+test);
+						
 						remove(tmp);
 						posToCards.remove(pos/4);
 						CardGUI realTest = posToCards.get(cardsToPos.get(test));
@@ -178,6 +181,7 @@ public class Board extends JPanel
 				if(removed<3){
 					int endPos = board.length()/4 + 3;
 					for(int j = removed; j<3; j++){
+						System.out.println("it is at end");
 						while(!posToCards.containsKey(endPos)) endPos--;
 						tmp = posToCards.get(endPos);
 						remove(tmp);
