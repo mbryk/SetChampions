@@ -23,6 +23,12 @@ public class BoardUtilities
 		generateDeck();
 		for(int i=0; i<nc; i++)
 				gameBoard[i] = deck[i];
+		while(getSets().isEmpty()) {
+			for(int i=0; i<3; i++) {
+				gameBoard[numCardsOnBoard++] = deck[--numCardsDeck];
+				deck[numCardsDeck+1] = null;
+			}
+		}
 	}
 	
 	public void setBoard(String setBoard){
