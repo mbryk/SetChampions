@@ -73,7 +73,9 @@ public class Board extends JPanel
 				card2 = card3;
 				card3 = thisCard;
 			}
-			thisCard.toggleBorder();			
+			thisCard.toggleBorder();
+			validate();
+			repaint();
 		}
 
 		@Override
@@ -144,6 +146,7 @@ public class Board extends JPanel
 					}
 					//reset card1, card2, card3
 					if(test == card3){
+						card3.resetBorder();
 						card3 = null;
 					}
 					if(test == card2){
@@ -151,6 +154,7 @@ public class Board extends JPanel
 							card2 = card3;
 							card3 = null;
 						}else{
+							card2.resetBorder();
 							card2 = null;
 						}
 					}
@@ -163,11 +167,11 @@ public class Board extends JPanel
 								card1 = card2;
 								card2 = null;
 						}else{
+							card1.resetBorder();
 							card1 = null;
 						}
 					}
 				}
-				
 			}else{
 				for(int i = 0; i < cardsToPos.size(); ++i){//change only the new cards
 					System.out.println("debug: there are " + cardsToPos.size() + " cards on the board");
@@ -234,8 +238,8 @@ public class Board extends JPanel
 				}
 			}
 		}
-		validate();
-		repaint();
+		//validate();
+		//repaint();
 		System.out.println("exiting updateBoard()");
 	}
 }

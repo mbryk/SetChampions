@@ -204,6 +204,8 @@ public class Main extends JFrame
 					System.out.println(in);
 					System.out.println(in.substring(7));
 					board.updateBoard(in.substring(7));
+					board.validate();
+					board.repaint();
 				}
 				if(in.startsWith("player: ")){
 					playerlist.updatePlayers(in.substring(8));
