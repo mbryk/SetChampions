@@ -107,6 +107,7 @@ public class Board extends JPanel
 			System.out.println("Error - cardsToPos.size() != posToCards.size()");
 		}
 		if(cardsToPos.isEmpty()){//set up board for the first time
+			removeAll();
 			for(int pos = 0; pos < board.length(); pos = pos+4){
 				CardGUI card = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
 				ClickListener clicked = new ClickListener(card);
@@ -134,16 +135,12 @@ public class Board extends JPanel
 				card.setNewCardBorder();
 			}
 			if(board.length() < 4*cardsToPos.size()){//we need to remove the selected cards from the board
-				for(int i = 0; i < cardsToPos.size(); ++i){
-					CardGUI test = posToCards.get(i);
-					if(i != cardsToPos.get(test)){//position is not valid - these are the last cards
-						CardGUI temp = posToCards.get(posToCards.size()-1); //the last card
-						posToCards.remove(i);
-						posToCards.put(i, posToCards.get(cardsToPos.size()));//replace the card at the first discrepancy with the last card
-						posToCards.remove(posToCards.size()-1);//remove the last card
-						cardsToPos.remove(test);//remove the missing card
-						cardsToPos.remove(temp);//remove last card
-						cardsToPos.put(temp, i);//put the last card in its place
+				for(int pos = 0; pos < board.length(); pos = pos+4){
+					CardGUI test = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
+					if(cardsToPos.get(test) != pos/4){//this card should be removed
+						remove(posToCards.get(pos/4));//remove from board
+						cardsToPos.remove(test);
+						posToCards.remove(pos/4);
 					}
 				}
 			}
