@@ -3,6 +3,8 @@ package client;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class LoginDAO {
 	static Connection currentCon = null;
@@ -26,6 +28,12 @@ public class LoginDAO {
 				return false;
 			} else {
 				System.out.println("Welcome " + username);
+				Date date = new Date();
+				Timestamp ts = new Timestamp(date.getTime());
+				System.out.println(ts.getTime());
+				String stamp = "update allUsers set lastSignIn=" + ts.getTime() + " where uname = '" + username 
+								+ "' and password = '" + password + "'";
+				stmt.executeUpdate(stamp);
 				return true;
 			}
 
@@ -39,7 +47,7 @@ public class LoginDAO {
 	public static boolean register(String username, String password) {
 		Statement stmt = null;
 		String searchQuery = "select * from allUsers where uname='" + username
-				+ "' AND password='" + password + "'";
+				+ "'";
 		try {
 			if (currentCon == null)
 				currentCon = ConnectionManager.getConnection();
@@ -49,8 +57,10 @@ public class LoginDAO {
 			boolean userExists = res.next();
 
 			if (!userExists) {
-				String registerQuery = "insert into allUsers (uname, password, score) values"
-										+ "('" + username + "', '" + password + "', '" + "0" + "');";
+				Date date = new Date();
+				Timestamp ts = new Timestamp(date.getTime());
+				String registerQuery = "insert into allUsers (uname, password, lastSignIn) values"
+										+ "('" + username + "', '" + password + "', '" + ts.getTime() + "');";
 				int retVal = stmt.executeUpdate(registerQuery);
 				if (retVal != 0) {
 					System.out.println("Successfully registered " + username);

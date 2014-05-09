@@ -1,7 +1,9 @@
 package server;
 
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Main {
 
@@ -14,7 +16,7 @@ public class Main {
 		
 		int points = 0;
 		int mmm;
-		for(int i=0; i<30; i++) {
+		for(int i=0; i<10; i++) {
 			Move m = board.getSets().get(0);
 			mmm = board.checkMove(m);
 			System.out.println(mmm+","+board.getBU().numCardsDeck);
@@ -39,6 +41,9 @@ public class Main {
 				break;
 			}
 		}
+		Date date = new Date();
+		Timestamp ts = new Timestamp(date.getTime());
+		System.out.println(ts.getTime());
 	}
 
 }
