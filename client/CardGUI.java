@@ -128,6 +128,7 @@ public class CardGUI extends JPanel implements ComponentListener
 		remove(cardPic);
 	}
 	public void resetPic() throws IOException{
+		System.out.println("resetPic called");
 		remove(cardPic);
 		String path = "setCards/";
 		//number
@@ -176,5 +177,15 @@ public class CardGUI extends JPanel implements ComponentListener
 		cardPic = new JLabel(new ImageIcon(cardPNG.getScaledInstance(getWidth(), getHeight(), 1)));
 		add(cardPic);
 		
+	}
+	public boolean equals(CardGUI card){
+		if(card.color == color && card.number == number && card.shape == shape && card.filled == filled){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	public int hashcode(){
+		return color + 10*number + 100*shape + 1000*filled;
 	}
 }
