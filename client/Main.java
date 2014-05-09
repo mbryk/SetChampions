@@ -192,6 +192,8 @@ public class Main extends JFrame
 			outToServer.println(lobby.gameChosen);
 			gameStarted = true;
 			ingame = true;
+			board.cardsToPos.clear();
+			board.posToCards.clear();
 			while(gameStarted){
 				String in = inFromServer.readLine();
 				if(in.startsWith("No")){

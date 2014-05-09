@@ -178,14 +178,16 @@ public class CardGUI extends JPanel implements ComponentListener
 		add(cardPic);
 		
 	}
-	public boolean equals(CardGUI card){
+	public boolean equals(Object mycard){
+		CardGUI card = (CardGUI) mycard;
 		if(card.color == color && card.number == number && card.shape == shape && card.filled == filled){
 			return true;
 		}else{
 			return false;
 		}
 	}
-	public int hashcode(){
+	public int hashCode(){
+		//System.out.println("hascode called");
 		return color + 10*number + 100*shape + 1000*filled;
 	}
 }
