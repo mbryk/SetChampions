@@ -2,9 +2,8 @@ package server;
 
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
 
-public class Board extends JPanel
+public class Board
 {
 	private BoardUtilities bu;
 	public Board(){
