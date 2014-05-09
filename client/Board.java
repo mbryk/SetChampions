@@ -136,7 +136,7 @@ public class Board extends JPanel
 				add(card);
 				card.setNewCardBorder();
 			}
-			CardGUI tmp;
+			CardGUI tmp = null;
 			if(board.length() < 4*cardsToPos.size()){//we need to remove the selected cards from the board
 				int removed = 0;
 				for(int pos = 0; pos < board.length(); pos = pos+4){
@@ -156,11 +156,11 @@ public class Board extends JPanel
 						removed++;
 					}
 					//reset card1, card2, card3
-					if(test == card3){
+					if(tmp == card3){
 						card3.resetBorder();
 						card3 = null;
 					}
-					if(test == card2){
+					if(tmp == card2){
 						if(card3 != null){
 							card2 = card3;
 							card3 = null;
@@ -169,7 +169,7 @@ public class Board extends JPanel
 							card2 = null;
 						}
 					}
-					if(test == card1){
+					if(tmp == card1){
 						if(card3 != null){
 							card1 = card2;
 							card2 = card3;
@@ -184,11 +184,13 @@ public class Board extends JPanel
 					}
 				}
 				if(removed<3){
+					int endPos = board.length()/4 + 3;
 					for(int j = removed; j<3; j++){
-						tmp = posToCards.get(posToCards.size()-1);
-						posToCards.remove(cardsToPos.size()-1);
-						cardsToPos.remove(tmp);
+						while(!posToCards.containsKey(endPos)) endPos--;
+						tmp = posToCards.get(endPos);
 						remove(tmp);
+						cardsToPos.remove(tmp);
+						posToCards.remove(endPos);
 					}
 				}
 			}else{
