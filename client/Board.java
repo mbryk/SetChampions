@@ -147,11 +147,11 @@ public class Board extends JPanel
 						removed++;
 					}
 					//reset card1, card2, card3
-					if(tmp == card3){
+					if((tmp!=null)&&tmp.equals(card3)){
 						//card3.resetBorder();
 						card3 = null;
 					}
-					if(tmp == card2){
+					if((tmp!=null)&&tmp.equals(card2)){
 						if(card3 != null){
 							card2 = card3;
 							card3 = null;
@@ -160,7 +160,7 @@ public class Board extends JPanel
 							card2 = null;
 						}
 					}
-					if(tmp == card1){
+					if((tmp!=null)&&tmp.equals(card1)){
 						if(card3 != null){
 							card1 = card2;
 							card2 = card3;
@@ -254,12 +254,12 @@ public class Board extends JPanel
 						System.out.println("Old Card:"+oldCard+" at "+i);
 						//check if this is card1, card2, card3
 						//check if card1,2,or 3 was removed
-						if(oldCard == card3){
+						if(oldCard.equals(card3)){
 							System.out.println("Was Card 3");
 							System.out.println(""+card1+card2+card3);
 							card3 = null;
 						}
-						if(oldCard == card2){
+						if((oldCard!=null)&&oldCard.equals(card2)){
 							if(card3 != null){
 								card2 = card3;
 								card3 = null;
@@ -269,7 +269,7 @@ public class Board extends JPanel
 							System.out.println("Was Card 2");
 							System.out.println(""+card1+card2+card3);
 						}
-						if(oldCard == card1){
+						if(oldCard.equals(card1)){
 							if(card3 != null){
 								card1 = card2;
 								card2 = card3;
