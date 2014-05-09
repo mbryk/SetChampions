@@ -125,18 +125,7 @@ public class Board extends JPanel
 				newCards.get(i).resetBorder();
 			}
 			newCards.clear();
-			while(board.length() > 4*cardsToPos.size()){//we need to add cards to the board - either 3, 6, or 9 of them
-				System.out.println("entering while loop");
-				int pos = 4*cardsToPos.size();
-				CardGUI card = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
-				ClickListener clicked = new ClickListener(card);
-				card.addMouseListener(clicked);
-				cardsToPos.put(card, pos/4);
-				posToCards.put(pos/4, card);
-				newCards.add(card);
-				add(card);
-				card.setNewCardBorder();
-			}
+			
 			CardGUI tmp = null;
 			if(board.length() < 4*cardsToPos.size()){//we need to remove the selected cards from the board
 				int removed = 0;
@@ -192,6 +181,7 @@ public class Board extends JPanel
 						remove(tmp);
 						cardsToPos.remove(tmp);
 						posToCards.remove(endPos);
+						removed++;
 					}
 				}
 				System.out.println(removed+" cards moved up!"); // Now you have three empty spots for new cards
@@ -229,6 +219,7 @@ public class Board extends JPanel
 						remove(tmp);
 						cardsToPos.remove(tmp);
 						posToCards.remove(endPos);
+						removed++;
 					}
 				}
 				System.out.println(removed+" cards moved up!"); // Now you have three empty spots for new cards
@@ -291,24 +282,45 @@ public class Board extends JPanel
 						}
 						cardsToPos.remove(oldCard);//remove the old card
 						posToCards.remove(i);//remove the old card
+						remove(oldCard);
 						//update the card
-						oldCard.color = test.color;
+						/*oldCard.color = test.color;
 						oldCard.filled = test.filled;
 						oldCard.shape = test.shape;
 						oldCard.number = test.number;
 						oldCard.resetPic();
 						oldCard.setNewCardBorder();
-						newCards.add(oldCard);
+						*/
+						ClickListener clicked = new ClickListener(test);
+						test.addMouseListener(clicked);
+						cardsToPos.put(test, i);
+						posToCards.put(i,test);
+						newCards.add(test);
+						add(test);
+						test.setNewCardBorder();
 						//now, update the lists
 						
 						
-						posToCards.put(i, oldCard);//put in the new card
-						cardsToPos.put(oldCard, i);//put in the new card
+						//posToCards.put(i, oldCard);//put in the new card
+						//cardsToPos.put(oldCard, i);//put in the new card
 						
 					}
 				}
 			}
+			while(board.length() > 4*cardsToPos.size()){//we need to add cards to the board - either 3, 6, or 9 of them
+				System.out.println("entering while loop");
+				int pos = 4*cardsToPos.size();
+				CardGUI card = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
+				ClickListener clicked = new ClickListener(card);
+				card.addMouseListener(clicked);
+				cardsToPos.put(card, pos/4);
+				posToCards.put(pos/4, card);
+				newCards.add(card);
+				add(card);
+				card.setNewCardBorder();
+			}
 		}
+		
 		//validate();
 		//repaint();
 		System.out.println("exiting updateBoard()");
