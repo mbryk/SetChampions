@@ -33,7 +33,7 @@ public class CardGUI extends JPanel implements ComponentListener
 	int number;
 	int color;
 	int filled;
-	public CardGUI(int ishape, int inumber, int icolor, int ifilled) throws IOException {
+	public CardGUI(int ishape, int icolor, int ifilled, int inumber) throws IOException {
 		shape = ishape;
 		number = inumber;
 		color = icolor;
@@ -43,6 +43,12 @@ public class CardGUI extends JPanel implements ComponentListener
 		setLayout(new GridLayout(1, 0, 0, 0));
 		String path = "setCards/";
 		//number
+		switch(number) { case 0: path+="one/";break; case 1: path+="two/";break; case 2: path+="three/";break;}
+		switch(color) { case 0: path+="red/";break; case 1: path+="green/";break; case 2: path+="purple/";break;}
+		switch(shape) { case 0: path+="diamond/";break; case 1: path+="wavy/";break; case 2: path+="oval/";break;}
+		switch(filled) { case 0: path+="clear/";break; case 1: path+="shaded/";break; case 2: path+="solid/";break;}
+		
+		/*
 		if(number==0){
 			path+="one/";
 		}
@@ -53,9 +59,7 @@ public class CardGUI extends JPanel implements ComponentListener
 			path+="three/";
 		}
 		//color
-		if(color==0){
-			path+="red/";
-		}
+		if(color==0)path+="red/";
 		if(color==1){
 			path+="green/";
 		}
@@ -82,6 +86,7 @@ public class CardGUI extends JPanel implements ComponentListener
 		if(filled==2){
 			path+="solid/";
 		}
+		*/
 		path+="card.PNG";
 		//now we have the path, add the picture
 		cardPNG = ImageIO.read(new File(path));
@@ -131,7 +136,12 @@ public class CardGUI extends JPanel implements ComponentListener
 		System.out.println("resetPic called");
 		remove(cardPic);
 		String path = "setCards/";
+		switch(number) { case 0: path+="one/";break; case 1: path+="two/";break; case 2: path+="three/";break;}
+		switch(color) { case 0: path+="red/";break; case 1: path+="green/";break; case 2: path+="purple/";break;}
+		switch(shape) { case 0: path+="diamond/";break; case 1: path+="wavy/";break; case 2: path+="oval/";break;}
+		switch(filled) { case 0: path+="clear/";break; case 1: path+="shaded/";break; case 2: path+="solid/";break;}
 		//number
+		/*
 		if(number==0){
 			path+="one/";
 		}
@@ -171,6 +181,7 @@ public class CardGUI extends JPanel implements ComponentListener
 		if(filled==2){
 			path+="solid/";
 		}
+		*/
 		path+="card.PNG";
 		//now we have the path, add the picture
 		cardPNG = ImageIO.read(new File(path));
@@ -179,6 +190,7 @@ public class CardGUI extends JPanel implements ComponentListener
 		
 	}
 	public boolean equals(Object mycard){
+		if(mycard==null) return false;
 		CardGUI card = (CardGUI) mycard;
 		if(card!=null&&card.color == color && card.number == number && card.shape == shape && card.filled == filled){
 			return true;
@@ -188,7 +200,7 @@ public class CardGUI extends JPanel implements ComponentListener
 	}
 	public int hashCode(){
 		//System.out.println("hascode called");
-		return color + 10*number + 100*shape + 1000*filled;
+		return number + 10*filled + 100*color + 1000*shape;
 	}
 	public String toString(){
 		String str = "";
