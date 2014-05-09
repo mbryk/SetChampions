@@ -151,30 +151,32 @@ public class Board extends JPanel
 						removed++;
 					}
 					//reset card1, card2, card3
-					if(card3!=null && tmp.equals(card3)){
-						//card3.resetBorder();
-						card3 = null;
-					}
-					if(card2!=null && tmp.equals(card2)){
-						if(card3 != null){
-							card2 = card3;
+					if(tmp!=null){
+						if(card3!=null && tmp.equals(card3)){
+							//card3.resetBorder();
 							card3 = null;
-						}else{
-							//card2.resetBorder();
-							card2 = null;
 						}
-					}
-					if(card1!=null && tmp .equals(card1)){
-						if(card3 != null){
-							card1 = card2;
-							card2 = card3;
-							card3 = null;
-						}else if(card2 != null){
-								card1 = card2;
+						if(card2!=null && tmp.equals(card2)){
+							if(card3 != null){
+								card2 = card3;
+								card3 = null;
+							}else{
+								//card2.resetBorder();
 								card2 = null;
-						}else{
-							//card1.resetBorder();
-							card1 = null;
+							}
+						}
+						if(card1!=null && tmp .equals(card1)){
+							if(card3 != null){
+								card1 = card2;
+								card2 = card3;
+								card3 = null;
+							}else if(card2 != null){
+									card1 = card2;
+									card2 = null;
+							}else{
+								//card1.resetBorder();
+								card1 = null;
+							}
 						}
 					}
 				}
