@@ -32,7 +32,7 @@ public class LoginDAO {
 				Timestamp ts = new Timestamp(date.getTime());
 				System.out.println(ts.getTime());
 				String stamp = "update allUsers set lastSignIn=" + ts.getTime() + " where uname = '" + username 
-								+ "' and password = '" + password + "'";
+								+ "' and password = '" + password + "';"; 
 				stmt.executeUpdate(stamp);
 				return true;
 			}
@@ -44,7 +44,7 @@ public class LoginDAO {
 		return false;
 	}
 	
-	public static boolean register(String username, String password) {
+	public static boolean register(String username, String password, String email) {
 		Statement stmt = null;
 		String searchQuery = "select * from allUsers where uname='" + username
 				+ "'";
@@ -59,8 +59,8 @@ public class LoginDAO {
 			if (!userExists) {
 				Date date = new Date();
 				Timestamp ts = new Timestamp(date.getTime());
-				String registerQuery = "insert into allUsers (uname, password, lastSignIn) values"
-										+ "('" + username + "', '" + password + "', '" + ts.getTime() + "');";
+				String registerQuery = "insert into allUsers (uname, password, lastSignIn, email) values"
+										+ "('" + username + "', '" + password + "', '" + ts.getTime() + "', '" + email + "');";
 				int retVal = stmt.executeUpdate(registerQuery);
 				if (retVal != 0) {
 					System.out.println("Successfully registered " + username);

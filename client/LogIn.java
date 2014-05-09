@@ -134,11 +134,12 @@ public class LogIn extends JPanel {
 		if(textField.getText().length() > 0 && passwordField.getPassword().length > 0){ //instead of testing if it equals null, because of newline characters
 			username = textField.getText();
 			password = String.valueOf(passwordField.getPassword());
+			String email = textField_1.getText();
 			
 			boolean register = registerBox.isSelected();
 			
 			if (register){
-				attemptSignIn = LoginDAO.register(username, password);
+				attemptSignIn = LoginDAO.register(username, password, email);
 				if(!attemptSignIn){
 					errorLabel.setForeground(Color.RED);
 					errorLabel.setText("That username already exists");
