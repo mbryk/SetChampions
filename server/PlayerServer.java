@@ -61,7 +61,6 @@ public class PlayerServer extends Thread {
 						lobby.removeGame(game);
 					}
 				} else{
-					player.resetPoints();
 					if(game.removePlayer(this)) // Game empty
 						lobby.removeGame(game);
 
@@ -73,6 +72,7 @@ public class PlayerServer extends Thread {
 					break;
 				}
 			}
+			player.resetPoints();
 			System.out.println("PlayerServer: Player Left :(");
 		}
     }

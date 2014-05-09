@@ -22,12 +22,14 @@ public class Game {
 	}
 	
 	public void addPlayer(PlayerServer pserver){
+		pserver.player.resetPoints();
 		players.add(pserver);
 		alertAll(0);
 		System.out.println("Game: player added");
 	}
 	
 	public boolean removePlayer(PlayerServer pserver){
+		pserver.player.resetPoints();
 		players.remove(pserver);
 		boolean empty = players.isEmpty();
 		if((!gameOver) && (!empty)) alertAll(0);
