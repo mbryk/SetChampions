@@ -124,7 +124,7 @@ public class Board extends JPanel
 			newCards.clear();
 			while(board.length() > 4*cardsToPos.size()){//we need to add cards to the board - either 3, 6, or 9 of them
 				System.out.println("entering while loop");
-				int pos = 4*cardsToPos.size();//TODO is this the bug? it shouldn't be -1?
+				int pos = 4*cardsToPos.size();
 				CardGUI card = new CardGUI(Character.getNumericValue(board.charAt(pos)), Character.getNumericValue(board.charAt(pos+1)), Character.getNumericValue(board.charAt(pos+2)), Character.getNumericValue(board.charAt(pos+3)));
 				ClickListener clicked = new ClickListener(card);
 				card.addMouseListener(clicked);
@@ -142,35 +142,11 @@ public class Board extends JPanel
 						cardsToPos.remove(test);
 						posToCards.remove(pos/4);
 					}
-				}
-			}
-			for(int i = 0; i < cardsToPos.size(); ++i){//change only the new cards
-				System.out.println("debug: there are " + cardsToPos.size() + " cards on the board");
-				
-				//debugging code
-				if(cardsToPos.size() != posToCards.size()){
-					System.out.println("Error - cardsToPos.size() = " + cardsToPos.size() + "and posToCards.size() = " + posToCards.size());
-				}
-				
-				CardGUI test = new CardGUI(Character.getNumericValue(board.charAt(4*i)), Character.getNumericValue(board.charAt(4*i+1)), Character.getNumericValue(board.charAt(4*i+2)), Character.getNumericValue(board.charAt(4*i+3)));
-				if(cardsToPos.containsKey(test) && cardsToPos.get(test) != i){//the card was moved from the end
-					//update its position
-					posToCards.remove(cardsToPos.size()-1);//remove last card
-					System.out.println("attempt1before "+cardsToPos.size());
-					cardsToPos.remove(test);//remove last card
-					System.out.println("attempt1after "+cardsToPos.size());
-					//TODO add mouselistener?
-					posToCards.put(i, test);
-					cardsToPos.put(test, i);
-				}
-				else if(!cardsToPos.containsKey(test)){//this is a new card
-					CardGUI oldCard = posToCards.get(i);
-					//check if this is card1, card2, card3
-					//check if card1,2,or 3 was removed
-					if(oldCard == card3){
+					//reset card1, card2, card3
+					if(test == card3){
 						card3 = null;
 					}
-					if(oldCard == card2){
+					if(test == card2){
 						if(card3 != null){
 							card2 = card3;
 							card3 = null;
@@ -178,7 +154,7 @@ public class Board extends JPanel
 							card2 = null;
 						}
 					}
-					if(oldCard == card1){
+					if(test == card1){
 						if(card3 != null){
 							card1 = card2;
 							card2 = card3;
@@ -190,21 +166,71 @@ public class Board extends JPanel
 							card1 = null;
 						}
 					}
-					cardsToPos.remove(oldCard);//remove the old card
-					//update the card
-					oldCard.color = test.color;
-					oldCard.filled = test.filled;
-					oldCard.shape = test.shape;
-					oldCard.number = test.number;
-					oldCard.resetPic();
-					oldCard.setNewCardBorder();
-					newCards.add(oldCard);
-					//now, update the lists
+				}
+				
+			}else{
+				for(int i = 0; i < cardsToPos.size(); ++i){//change only the new cards
+					System.out.println("debug: there are " + cardsToPos.size() + " cards on the board");
 					
-					posToCards.remove(i);//remove the old card
-					posToCards.put(i, oldCard);//put in the new card
-					cardsToPos.put(oldCard, i);//put in the new card
+					//debugging code
+					if(cardsToPos.size() != posToCards.size()){
+						System.out.println("Error - cardsToPos.size() = " + cardsToPos.size() + "and posToCards.size() = " + posToCards.size());
+					}
 					
+					CardGUI test = new CardGUI(Character.getNumericValue(board.charAt(4*i)), Character.getNumericValue(board.charAt(4*i+1)), Character.getNumericValue(board.charAt(4*i+2)), Character.getNumericValue(board.charAt(4*i+3)));
+					if(cardsToPos.containsKey(test) && cardsToPos.get(test) != i){//the card was moved from the end
+						//update its position
+						posToCards.remove(cardsToPos.size()-1);//remove last card
+						System.out.println("attempt1before "+cardsToPos.size());
+						cardsToPos.remove(test);//remove last card
+						System.out.println("attempt1after "+cardsToPos.size());
+						//TODO add mouselistener?
+						posToCards.put(i, test);
+						cardsToPos.put(test, i);
+					}
+					else if(!cardsToPos.containsKey(test)){//this is a new card
+						CardGUI oldCard = posToCards.get(i);
+						//check if this is card1, card2, card3
+						//check if card1,2,or 3 was removed
+						if(oldCard == card3){
+							card3 = null;
+						}
+						if(oldCard == card2){
+							if(card3 != null){
+								card2 = card3;
+								card3 = null;
+							}else{
+								card2 = null;
+							}
+						}
+						if(oldCard == card1){
+							if(card3 != null){
+								card1 = card2;
+								card2 = card3;
+								card3 = null;
+							}else if(card2 != null){
+									card1 = card2;
+									card2 = null;
+							}else{
+								card1 = null;
+							}
+						}
+						cardsToPos.remove(oldCard);//remove the old card
+						//update the card
+						oldCard.color = test.color;
+						oldCard.filled = test.filled;
+						oldCard.shape = test.shape;
+						oldCard.number = test.number;
+						oldCard.resetPic();
+						oldCard.setNewCardBorder();
+						newCards.add(oldCard);
+						//now, update the lists
+						
+						posToCards.remove(i);//remove the old card
+						posToCards.put(i, oldCard);//put in the new card
+						cardsToPos.put(oldCard, i);//put in the new card
+						
+					}
 				}
 			}
 		}
